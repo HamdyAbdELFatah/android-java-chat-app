@@ -80,7 +80,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
         }
         if (intent.hasExtra(StringContract.IntentStrings.INTENT_GROUP_NAME)) {
             if (isViewAttached())
-                getBaseView().setTitle(intent.getStringExtra(StringContract.IntentStrings.INTENT_GROUP_NAME));
+            getBaseView().setTitle(intent.getStringExtra(StringContract.IntentStrings.INTENT_GROUP_NAME));
         }
 
     }
@@ -92,8 +92,8 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             @Override
             public void onTextMessageReceived(TextMessage message) {
                 if (groupId != null && groupId.equals(message.getReceiverUid()) && !message.getSender().getUid().equals(ownerId)) {
-                    CometChat.markAsRead(message.getId(), message.getReceiverUid(), message.getReceiverType());
-                    MediaUtils.playSendSound(context, R.raw.receive);
+
+                    MediaUtils.playSendSound(context,R.raw.receive);
                     getBaseView().addReceivedMessage(message);
                 }
             }
@@ -102,9 +102,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             public void onMediaMessageReceived(MediaMessage message) {
                 if (groupId != null && groupId.equals(message.getReceiverUid()) && !message.getSender().getUid().equals(ownerId)) {
 
-                    CometChat.markAsRead(message.getId(), message.getReceiverUid(), message.getReceiverType());
-
-                    MediaUtils.playSendSound(context, R.raw.receive);
+                    MediaUtils.playSendSound(context,R.raw.receive);
                     getBaseView().addReceivedMessage(message);
                 }
             }
@@ -112,39 +110,37 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             @Override
             public void onTypingStarted(TypingIndicator typingIndicator) {
                 if (typingIndicator.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP))
-                    getBaseView().typingStarted(typingIndicator);
+                getBaseView().typingStarted(typingIndicator);
             }
 
             @Override
             public void onTypingEnded(TypingIndicator typingIndicator) {
                 if (typingIndicator.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP))
-                    getBaseView().typingEnded(typingIndicator);
+                getBaseView().typingEnded(typingIndicator);
             }
 
             @Override
-            public void onMessagesDelivered(MessageReceipt messageReceipt) {
+            public void onMessageDelivered(MessageReceipt messageReceipt) {
                 if (messageReceipt.getReceivertype().equals(CometChatConstants.RECEIVER_TYPE_GROUP))
-                    getBaseView().setDeliveryReceipt(messageReceipt);
-
+                getBaseView().setDeliveryReceipt(messageReceipt);
             }
 
             @Override
-            public void onMessagesRead(MessageReceipt messageReceipt) {
+            public void onMessageRead(MessageReceipt messageReceipt) {
                 if (messageReceipt.getReceivertype().equals(CometChatConstants.RECEIVER_TYPE_GROUP))
-                    getBaseView().onMessageRead(messageReceipt);
-
+               getBaseView().onMessageRead(messageReceipt);
             }
 
             @Override
             public void onMessageEdited(BaseMessage message) {
                 if (message.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP))
-                    getBaseView().setEditedMessage(message);
+                getBaseView().setEditedMessage(message);
             }
 
             @Override
             public void onMessageDeleted(BaseMessage message) {
                 if (message.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP))
-                    getBaseView().setDeletedMessage(message);
+                getBaseView().setDeletedMessage(message);
             }
 
         });
@@ -152,8 +148,8 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
     @Override
     public void refreshList(String groupId, String ownerId, int limit) {
-        messagesRequest = null;
-        fetchPreviousMessage(groupId, limit);
+        messagesRequest=null;
+        fetchPreviousMessage(groupId,limit);
     }
 
     @Override
@@ -167,13 +163,13 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
     }
 
     @Override
-    public void addGroupEventListener(String listenerId, final String groupId, final String ownerId) {
+    public void addGroupEventListener(String listenerId,final String groupId, final String ownerId) {
 
         CometChat.addGroupListener(listenerId, new CometChat.GroupListener() {
             @Override
             public void onGroupMemberJoined(Action action, User joinedUser, Group joinedGroup) {
 
-                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())){
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
                 }
@@ -181,7 +177,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberLeft(Action action, User joinedUser, Group joinedGroup) {
-                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())){
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
                 }
@@ -189,7 +185,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberKicked(Action action, User kickedUser, User kickedBy, Group kickedFrom) {
-                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())){
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
                 }
@@ -197,7 +193,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberBanned(Action action, User bannedUser, User bannedBy, Group bannedFrom) {
-                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())){
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
                 }
@@ -205,7 +201,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberUnbanned(Action action, User unbannedUser, User unbannedBy, Group unbannedFrom) {
-                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())){
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
                 }
@@ -213,7 +209,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberScopeChanged(Action action, User updatedBy, User updatedUser, String scopeChangedTo, String scopeChangedFrom, Group group) {
-                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())){
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
                 }
@@ -234,9 +230,9 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
     @Override
     public void sendTextMessage(final String message, String groupId) {
 
-        TextMessage textMessage = new TextMessage(groupId, message, CometChatConstants.RECEIVER_TYPE_GROUP);
+        TextMessage textMessage = new TextMessage(groupId, message,CometChatConstants.MESSAGE_TYPE_TEXT,CometChatConstants.RECEIVER_TYPE_GROUP);
 
-        if (GroupChatActivity.isReply) {
+        if (GroupChatActivity.isReply){
             textMessage.setMetadata(GroupChatActivity.metaData);
             GroupChatActivity.hideReply();
         }
@@ -244,7 +240,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
         CometChat.sendMessage(textMessage, new CometChat.CallbackListener<TextMessage>() {
             @Override
             public void onSuccess(TextMessage textMessage1) {
-                MediaUtils.playSendSound(context, R.raw.send);
+                MediaUtils.playSendSound(context,R.raw.send);
                 if (isViewAttached())
                     getBaseView().addSentMessage(textMessage1);
             }
@@ -260,19 +256,19 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
     @Override
     public void sendCallRequest(Context Context, String groupId, String receiverType, String callType) {
 
-        Call call = new Call(groupId, receiverType, callType);
+             Call call = new Call(groupId, receiverType, callType);
 
-        CometChat.initiateCall(call, new CometChat.CallbackListener<Call>() {
-            @Override
-            public void onSuccess(Call call) {
-                CommonUtils.startCallIntent(context, (Group) call.getCallReceiver(), call.getType(), true, call.getSessionId());
-            }
+             CometChat.initiateCall(call, new CometChat.CallbackListener<Call>() {
+                 @Override
+                 public void onSuccess(Call call) {
+                     CommonUtils.startCallIntent(context, (Group) call.getCallReceiver(), call.getType(), true, call.getSessionId());
+                 }
 
-            @Override
-            public void onError(CometChatException e) {
+                 @Override
+                 public void onError(CometChatException e) {
 
-            }
-        });
+                 }
+             });
     }
 
     @Override
@@ -281,15 +277,16 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             @Override
             public void onIncomingCallReceived(Call call) {
 
-                if (call.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
+                    if(call.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
 
-                    CommonUtils.startCallIntent(context, (User) call.getCallInitiator(), call.getType(),
-                            false, call.getSessionId());
-                } else if (call.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP)) {
+                        CommonUtils.startCallIntent(context, (User) call.getCallInitiator(), call.getType(),
+                                false, call.getSessionId());
+                    }
+                    else if(call.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP)) {
 
-                    CommonUtils.startCallIntent(context, (Group) call.getCallReceiver(), call.getType(),
-                            false, call.getSessionId());
-                }
+                        CommonUtils.startCallIntent(context, (Group) call.getCallReceiver(), call.getType(),
+                                false, call.getSessionId());
+                    }
 
             }
 
@@ -319,12 +316,12 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
     @Override
     public void sendTypingIndicator(String groupId) {
-        CometChat.startTyping(new TypingIndicator(groupId, CometChatConstants.RECEIVER_TYPE_GROUP));
+        CometChat.startTyping(new TypingIndicator(groupId,CometChatConstants.RECEIVER_TYPE_GROUP));
     }
 
     @Override
     public void endTypingIndicator(String groupId) {
-        CometChat.endTyping(new TypingIndicator(groupId, CometChatConstants.RECEIVER_TYPE_GROUP));
+        CometChat.endTyping(new TypingIndicator(groupId,CometChatConstants.RECEIVER_TYPE_GROUP));
     }
 
     @Override
@@ -333,7 +330,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
         CometChat.deleteMessage(baseMessage.getId(), new CometChat.CallbackListener<BaseMessage>() {
             @Override
             public void onSuccess(BaseMessage baseMessage) {
-                Log.d(TAG, "onSuccess: deleteMessage " + baseMessage.toString());
+                Log.d(TAG, "onSuccess: deleteMessage "+baseMessage.toString());
                 getBaseView().setDeletedMessage(baseMessage);
             }
 
@@ -347,28 +344,28 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
     @Override
     public void editMessage(BaseMessage baseMessage, String message) {
 
-        TextMessage textMessage = new TextMessage(baseMessage.getReceiverUid(), message, baseMessage.getReceiverType());
+        TextMessage textMessage=new TextMessage(baseMessage.getReceiverUid(),message,CometChatConstants.MESSAGE_TYPE_TEXT,baseMessage.getReceiverType());
         textMessage.setId(baseMessage.getId());
         CometChat.editMessage(textMessage, new CometChat.CallbackListener<BaseMessage>() {
             @Override
             public void onSuccess(BaseMessage baseMessage) {
-                Log.d(TAG, "editMessage onSuccess: " + baseMessage.toString());
+                Log.d(TAG, "editMessage onSuccess: "+baseMessage.toString());
                 getBaseView().setEditedMessage(baseMessage);
             }
 
             @Override
             public void onError(CometChatException e) {
-                Log.d(TAG, "editMessage onError: " + e.getMessage());
+                Log.d(TAG, "editMessage onError: "+e.getMessage());
             }
         });
     }
 
     @Override
-    public void searchMessage(String s, String GUID) {
-        List<BaseMessage> list = new ArrayList<>();
+    public void searchMessage(String s,String GUID) {
+        List<BaseMessage> list=new ArrayList<>();
 
-        messagesRequest = null;
-        MessagesRequest searchMessageRequest = new MessagesRequest.MessagesRequestBuilder()
+        messagesRequest=null;
+        MessagesRequest searchMessageRequest=new MessagesRequest.MessagesRequestBuilder()
                 .setGUID(GUID).setSearchKeyword(s).setLimit(30).build();
 
         searchMessageRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
@@ -376,8 +373,8 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             public void onSuccess(List<BaseMessage> baseMessages) {
                 if (isViewAttached()) {
                     for (BaseMessage baseMessage : baseMessages) {
-                        Log.d(TAG, "onSuccess: delete " + baseMessage.getDeletedAt());
-                        if (!baseMessage.getCategory().equals(CometChatConstants.CATEGORY_ACTION) && baseMessage.getDeletedAt() == 0) {
+                        Log.d(TAG, "onSuccess: delete "+baseMessage.getDeletedAt());
+                        if (!baseMessage.getCategory().equals(CometChatConstants.CATEGORY_ACTION)&&baseMessage.getDeletedAt()==0) {
                             list.add(baseMessage);
                         }
                     }
@@ -387,7 +384,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onError(CometChatException e) {
-                Log.d(TAG, " onError: " + e.getMessage());
+                Log.d(TAG, " onError: "+e.getMessage());
             }
         });
 
@@ -395,46 +392,64 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
     @Override
     public void fetchPreviousMessage(String groupId, int limit) {
-
+        List<BaseMessage> list=new ArrayList<>();
         if (messagesRequest == null) {
             messagesRequest = new MessagesRequest.MessagesRequestBuilder().setGUID(groupId).setLimit(limit).hideMessagesFromBlockedUsers(true).build();
+            messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
+                @Override
+                public void onSuccess(List<BaseMessage> baseMessages) {
 
-        }
-        makeGroupChatRequest(messagesRequest);
+                    if (isViewAttached()){
+                        for (BaseMessage baseMessage : baseMessages) {
+                            Log.d(TAG, "onSuccess: fetchPrevious" + baseMessage.toString());
+                            Logger.error("groupMessage" + baseMessage.getId() + " timestamp : " + baseMessage.getSentAt() + " list size :" + baseMessages.size());
 
-    }
+                            CometChat.markMessageAsRead(baseMessage);
 
-    private void makeGroupChatRequest(MessagesRequest messagesRequest) {
-        List<BaseMessage> list = new ArrayList<>();
-        messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
-            @Override
-            public void onSuccess(List<BaseMessage> baseMessages) {
-                if (isViewAttached()) {
-                    for (BaseMessage baseMessage : baseMessages) {
-                        Log.d(TAG, "onSuccess: fetchPrevious" + baseMessage.toString());
-                        Logger.error("groupMessage" + baseMessage.getId());
+                            if (baseMessage.getDeletedAt() == 0) {
+                                list.add(baseMessage);
+                            }
 
-                        if (baseMessage.getDeletedAt() == 0) {
-                            list.add(baseMessage);
                         }
-                    }
-                    if (baseMessages.size() != 0) {
-                        BaseMessage baseMessage = baseMessages.get(baseMessages.size() - 1);
-                        CometChat.markAsRead(baseMessage.getId(), baseMessage.getReceiverUid(), baseMessage.getReceiverType());
-                    }
-                    getBaseView().setAdapter(baseMessages);
+                    getBaseView().setAdapter(list);
                 }
 
-            }
+                }
 
-            @Override
-            public void onError(CometChatException e) {
+                @Override
+                public void onError(CometChatException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
 
-            }
+            });
+        } else {
+            messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
+                @Override
+                public void onSuccess(List<BaseMessage> baseMessages) {
+                    if (isViewAttached()) {
+                        for (BaseMessage baseMessage : baseMessages) {
+                            Log.d(TAG, "onSuccess: fetchPrevious" + baseMessage.toString());
+                            Logger.error("groupMessage" + baseMessage.getId());
 
-        });
+                            if (baseMessage.getDeletedAt() == 0) {
+                                list.add(baseMessage);
+                            }
+                            CometChat.markMessageAsRead(baseMessage);
+                        }
+                        getBaseView().setAdapter(baseMessages);
+                    }
+
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            });
+        }
+
     }
-
 
     @Override
     public void fetchGroupMembers(String groupId) {
@@ -445,23 +460,23 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
         groupMembersRequest.fetchNext(new CometChat.CallbackListener<List<GroupMember>>() {
             @Override
             public void onSuccess(List<GroupMember> groupMembers) {
-                String s[] = new String[0];
-                if (groupMembers != null && groupMembers.size() != 0) {
-                    s = new String[groupMembers.size()];
-                    for (int j = 0; j < groupMembers.size(); j++) {
+                    String s[] = new String[0];
+                    if (groupMembers != null && groupMembers.size() != 0) {
+                        s= new String[groupMembers.size()];
+                        for (int j = 0; j < groupMembers.size(); j++) {
 
-                        s[j] = groupMembers.get(j).getName();
+                            s[j] = groupMembers.get(j).getName();
+                        }
+
                     }
-
-                }
-                if (isViewAttached())
-                    getBaseView().setSubTitle(s);
+                    if (isViewAttached())
+                        getBaseView().setSubTitle(s);
 
             }
 
             @Override
             public void onError(CometChatException e) {
-
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -481,16 +496,16 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
         MediaMessage mediaMessage = new MediaMessage(groupId, file, messageType,
                 CometChatConstants.RECEIVER_TYPE_GROUP);
         mediaMessage.setSentAt(System.currentTimeMillis());
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject=new JSONObject();
 
         try {
-            jsonObject.put("path", file.getAbsolutePath());
+            jsonObject.put("path",file.getAbsolutePath());
         } catch (JSONException e) {
             e.printStackTrace();
         }
         mediaMessage.setMetadata(jsonObject);
 
-        if (GroupChatActivity.isReply) {
+        if (GroupChatActivity.isReply){
             mediaMessage.setMetadata(GroupChatActivity.metaData);
             GroupChatActivity.hideReply();
         }
@@ -499,18 +514,18 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             @Override
             public void onSuccess(MediaMessage mediaMessage1) {
 
-                OneToOneChatActivity.isReply = false;
-                OneToOneChatActivity.metaData = null;
+                OneToOneChatActivity.isReply=false;
+                OneToOneChatActivity.metaData=null;
                 if (isViewAttached()) {
                     getBaseView().addSentMessage(mediaMessage1);
                 }
-                MediaUtils.playSendSound(context, R.raw.send);
+                MediaUtils.playSendSound(context,R.raw.send);
             }
 
             @Override
             public void onError(CometChatException e) {
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onError: " + e.getMessage());
+                Log.d(TAG, "onError: "+e.getMessage());
             }
 
         });
@@ -526,14 +541,14 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             public void onSuccess(String s) {
                 group.setHasJoined(false);
                 Toast.makeText(context, "left", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, CometChatActivity.class);
-                ((Activity) context).startActivityForResult(intent, StringContract.RequestCode.LEFT);
-                ((GroupChatActivity) context).finish();
+                Intent intent=new Intent(context,CometChatActivity.class);
+                ((Activity)context).startActivityForResult(intent,StringContract.RequestCode.LEFT);
+                ((GroupChatActivity)context).finish();
             }
 
             @Override
             public void onError(CometChatException e) {
-
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

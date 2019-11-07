@@ -3,6 +3,11 @@ package com.inscripts.cometchatpulse.demo.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -10,10 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.models.User;
@@ -28,7 +29,6 @@ import com.inscripts.cometchatpulse.demo.Utils.CommonUtils;
 import com.cometchat.pro.models.GroupMember;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,14 +71,12 @@ public class MemberListFragment extends Fragment implements MemberListFragmentCo
         rvMembers.setLayoutManager(linearLayoutManager);
 
 
-
         if (getArguments().containsKey(StringContract.IntentStrings.INTENT_GROUP_ID)) {
             groupId = getArguments().getString(StringContract.IntentStrings.INTENT_GROUP_ID);
             memberListFragmentPresenter.initMemberList(groupId, LIMIT, getContext());
         }
-        if (getArguments().containsKey(StringContract.IntentStrings.USER_ID))
-        {
-            ownerUid=getArguments().getString(StringContract.IntentStrings.USER_ID);
+        if (getArguments().containsKey(StringContract.IntentStrings.USER_ID)) {
+            ownerUid = getArguments().getString(StringContract.IntentStrings.USER_ID);
         }
 
         if (getArguments().containsKey(StringContract.IntentStrings.INTENT_SCOPE)) {
@@ -89,7 +87,7 @@ public class MemberListFragment extends Fragment implements MemberListFragmentCo
             @Override
             public void onClick(View var1, int var2) {
 
-                if (scope.equals(CometChatConstants.SCOPE_MODERATOR) || scope.equals(CometChatConstants.SCOPE_ADMIN)) {
+                if (scope!=null&&scope.equals(CometChatConstants.SCOPE_MODERATOR) || scope.equals(CometChatConstants.SCOPE_ADMIN)) {
 
                     registerForContextMenu(rvMembers);
                     user = (User) var1.getTag(R.string.user);
@@ -123,22 +121,22 @@ public class MemberListFragment extends Fragment implements MemberListFragmentCo
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.menu_group_action, menu);
 
-        MenuItem menuItem=menu.findItem(R.id.menu_item_Reinstate);
+        MenuItem menuItem = menu.findItem(R.id.menu_item_Reinstate);
 
         menuItem.setVisible(false);
-        menu.setHeaderTitle(CommonUtils.setTitle("Select Action",getContext()));
+        menu.setHeaderTitle(CommonUtils.setTitle("Select Action", getContext()));
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(groupMemberListAdapter!=null) {
+        if (groupMemberListAdapter != null) {
             groupMemberListAdapter.resetAdapter();
-
         }
+        memberListFragmentPresenter.refresh(groupId, LIMIT, getContext());
 
-        memberListFragmentPresenter.refresh(groupId,LIMIT,getContext());
+
     }
 
     @Override
@@ -147,10 +145,10 @@ public class MemberListFragment extends Fragment implements MemberListFragmentCo
         switch (item.getItemId()) {
             case R.id.menu_item_outcast:
                 showToast("banned");
-                memberListFragmentPresenter.outCastUser(user.getUid(), groupId,groupMemberListAdapter);
+                memberListFragmentPresenter.outCastUser(user.getUid(), groupId, groupMemberListAdapter);
                 break;
             case R.id.menu_item_kick:
-                memberListFragmentPresenter.kickUser(user.getUid(), groupId,groupMemberListAdapter);
+                memberListFragmentPresenter.kickUser(user.getUid(), groupId, groupMemberListAdapter);
                 showToast("kick");
                 break;
             case R.id.menu_view_profile:
@@ -181,12 +179,11 @@ public class MemberListFragment extends Fragment implements MemberListFragmentCo
     }
 
 
-
     @Override
-    public void setAdapter(HashMap<String ,GroupMember> groupMemberList) {
+    public void setAdapter(HashMap<String, GroupMember> groupMemberList) {
 
         if (groupMemberListAdapter == null) {
-            groupMemberListAdapter = new GroupMemberListAdapter(groupMemberList, getContext(),ownerUid);
+            groupMemberListAdapter = new GroupMemberListAdapter(groupMemberList, getContext(), ownerUid);
             memberListFragmentPresenter.addGroupEventListener("MemberListFragment",groupId,groupMemberListAdapter);
             rvMembers.setAdapter(groupMemberListAdapter);
         } else {
@@ -196,11 +193,11 @@ public class MemberListFragment extends Fragment implements MemberListFragmentCo
 
     @Override
     public void removeMember(String uid) {
-        if (groupMemberListAdapter!=null){
+        if (groupMemberListAdapter != null) {
             groupMemberListAdapter.removeMember(uid);
             try {
                 getContext().sendBroadcast(new Intent().setAction("refresh"));
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
 

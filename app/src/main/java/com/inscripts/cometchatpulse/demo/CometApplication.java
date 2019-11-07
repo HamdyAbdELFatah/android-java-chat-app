@@ -4,13 +4,9 @@ import android.app.Application;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
-import com.cometchat.pro.core.AppSettings;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
-import com.cometchat.pro.helpers.Logger;
 import com.inscripts.cometchatpulse.demo.Contracts.StringContract;
-
-import timber.log.Timber;
 
 
 public class CometApplication extends Application {
@@ -23,9 +19,8 @@ public class CometApplication extends Application {
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-//        Logger.enableLogs("4ddd5d736cf33ca31a0b4c72ae64b6d5");
-        AppSettings appSettings=new AppSettings.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(StringContract.AppDetails.REGION).build();
-        CometChat.init(this,StringContract.AppDetails.APP_ID,appSettings,new CometChat.CallbackListener<String>() {
+
+        CometChat.init(this,StringContract.AppDetails.APP_ID,new CometChat.CallbackListener<String>() {
 
             @Override
             public void onSuccess(String s) {
@@ -35,7 +30,7 @@ public class CometApplication extends Application {
             @Override
             public void onError(CometChatException e) {
                 Toast.makeText(CometApplication.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                Timber.d("onError: %s", e.getMessage());
+                Log.d(TAG, "onError: "+e.getMessage());
             }
 
         });

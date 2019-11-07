@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.cometchat.pro.constants.CometChatConstants;
 import com.inscripts.cometchatpulse.demo.Base.Presenter;
-import com.inscripts.cometchatpulse.demo.CometApplication;
 import com.inscripts.cometchatpulse.demo.Contracts.ContactsContract;
 import com.inscripts.cometchatpulse.demo.Utils.Logger;
 import com.cometchat.pro.core.CometChat;
@@ -52,6 +51,7 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
                 @Override
                 public void onError(CometChatException e) {
                     Timber.d("fetchNext onError: %s", e.getMessage());
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -73,7 +73,6 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
                 @Override
                 public void onError(CometChatException e) {
                     Timber.d("fetchNext old onError: ");
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             });
@@ -86,13 +85,13 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
         CometChat.addUserListener(presenceListener, new CometChat.UserListener() {
             @Override
             public void onUserOnline(User user) {
-                Timber.d("onUserOnline: %s", user.toString());
+                Log.d(TAG, "onUserOnline: "+user.toString());
                    getBaseView().updatePresence(user);
             }
 
             @Override
             public void onUserOffline(User user) {
-                Timber.d("onUserOffline: %s", user.toString());
+                Log.d(TAG, "onUserOffline: "+user.toString());
                   getBaseView().updatePresence(user);
             }
         });
@@ -119,14 +118,14 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
            @Override
            public void onSuccess(List<User> users) {
                 for (User user:users){
-                    Timber.d("usersRequest onSuccess: %s", user.toString());
+                    Log.d(TAG, "usersRequest onSuccess: "+user.toString());
                      hashMap.put(user.getUid(),user);
                 }
                getBaseView().setFilterList(hashMap);
            }
            @Override
            public void onError(CometChatException e) {
-               Timber.d("onError: fetchNext %s", e.getMessage());
+               Log.d(TAG, "onError: fetchNext "+e.getMessage());
            }
        });
 
@@ -142,6 +141,7 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
 
             @Override
             public void onError(CometChatException e) {
+
             }
         });
     }

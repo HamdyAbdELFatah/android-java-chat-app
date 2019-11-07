@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-
 import androidx.annotation.NonNull;
 
 import com.inscripts.cometchatpulse.demo.R;

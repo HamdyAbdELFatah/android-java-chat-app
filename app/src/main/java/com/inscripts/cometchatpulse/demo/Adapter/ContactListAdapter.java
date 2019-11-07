@@ -2,14 +2,14 @@ package com.inscripts.cometchatpulse.demo.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.CustomView.CircleImageView;
@@ -30,20 +30,17 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     private HashMap<String, User> userHashMap;
 
-    private List<User> userList;
 
     private boolean isBlockedList;
 
     private int resId;
 
-    private HashMap<String, Integer> unreadCountMap;
 
     public ContactListAdapter(HashMap<String, User> userHashMap, Context context, int resId, boolean isBlockedList) {
         this.userHashMap = userHashMap;
         this.context = context;
         this.isBlockedList = isBlockedList;
         this.resId = resId;
-        userList = new ArrayList<>();
         new FontUtils(context);
 
     }
@@ -129,7 +126,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     public void setUnreadCount(HashMap<String, Integer> stringIntegerHashMap) {
-        unreadCountMap =stringIntegerHashMap;
+
     }
 
     public void setFilterList(HashMap<String, User> hashMap) {

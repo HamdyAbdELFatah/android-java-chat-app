@@ -11,6 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,14 +36,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.cometchat.pro.models.MediaMessage;
 import com.cometchat.pro.models.MessageReceipt;
@@ -65,8 +66,10 @@ import com.inscripts.cometchatpulse.demo.Utils.MediaUtils;
 import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.models.BaseMessage;
 import com.cometchat.pro.models.Group;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -586,7 +589,11 @@ public class GroupChatActivity extends AppCompatActivity implements GroupChatAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        groupChatPresenter.removeMessageReceiveListener(getResources().getString(R.string.group_message_listener));
+        groupChatPresenter.removeMessageReceiveListener("action_message");
+        groupChatPresenter.removeCallListener("call_listener");
         groupChatPresenter.detach();
+
     }
 
     @Override
@@ -608,7 +615,6 @@ public class GroupChatActivity extends AppCompatActivity implements GroupChatAct
                 Intent intent = new Intent(this, GroupDetailActivity.class);
                 intent.putExtra(StringContract.IntentStrings.INTENT_GROUP_NAME, group.getName());
                 intent.putExtra(StringContract.IntentStrings.INTENT_GROUP_ID, group.getGuid());
-                finish();
                 startActivity(intent);
                 break;
 
@@ -921,7 +927,7 @@ public class GroupChatActivity extends AppCompatActivity implements GroupChatAct
                     intent.putExtra("text",((TextMessage)baseMessage).getText());
                 }
                 if (baseMessage instanceof MediaMessage){
-                    intent.putExtra("url",((MediaMessage)baseMessage).getAttachment().getFileUrl());
+                    intent.putExtra("url",((MediaMessage)baseMessage).getUrl());
                 }
                 startActivity(intent);
                 break;

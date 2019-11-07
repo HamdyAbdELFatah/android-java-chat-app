@@ -2,34 +2,39 @@ package com.inscripts.cometchatpulse.demo.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+import com.cometchat.pro.models.Group;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.CustomView.CircleImageView;
 import com.inscripts.cometchatpulse.demo.Utils.ColorUtils;
 import com.inscripts.cometchatpulse.demo.Utils.MediaUtils;
+
 import com.cometchat.pro.models.GroupMember;
 import com.cometchat.pro.models.User;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListAdapter.GroupMemberHolder> {
 
     private final String ownerId;
-    private HashMap<String ,GroupMember> groupMemberList;
+    private HashMap<String, GroupMember> groupMemberList;
 
     private Context context;
 
-    public GroupMemberListAdapter(HashMap<String ,GroupMember> groupMemberList, Context context, String ownerId) {
+    public GroupMemberListAdapter(HashMap<String, GroupMember> groupMemberList, Context context, String ownerId) {
         this.groupMemberList = groupMemberList;
         this.context = context;
-        this.ownerId=ownerId;
+        this.ownerId = ownerId;
     }
 
     @NonNull
@@ -44,10 +49,9 @@ public class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberList
 
         GroupMember groupMember = new ArrayList<>(groupMemberList.values()).get(i);
         User user = groupMember;
-        if (user.getUid().equals(ownerId))
-        {
+        if (user.getUid().equals(ownerId)) {
             groupMemberHolder.userName.setText(context.getString(R.string.you));
-        }else {
+        } else {
             groupMemberHolder.userName.setText(user.getName());
         }
         groupMemberHolder.userStatus.setText(groupMember.getScope());
@@ -73,17 +77,6 @@ public class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberList
 
     }
 
-
-    public void removeMember(String uid) {
-        try {
-            groupMemberList.remove(uid);
-            notifyDataSetChanged();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-    }
     public void addMember(String uid,GroupMember user) {
         try {
             groupMemberList.put(uid,user);
@@ -94,6 +87,16 @@ public class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberList
         }
 
     }
+    public void removeMember(String uid) {
+        try {
+            groupMemberList.remove(uid);
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public int getItemCount() {
 
@@ -102,8 +105,15 @@ public class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberList
         } else {
             return 0;
         }
+    }
 
+    public void resetAdapter() {
+        groupMemberList.clear();
+    }
 
+    public void refreshList(HashMap<String, GroupMember> groupMemberList) {
+        this.groupMemberList.putAll(groupMemberList);
+        notifyDataSetChanged();
     }
 
     public void updateMember(String uid, String scope) {
@@ -112,15 +122,6 @@ public class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberList
             groupMember.setScope(scope);
 
         this.groupMemberList.put(uid, groupMember);
-        notifyDataSetChanged();
-    }
-
-    public void resetAdapter() {
-        groupMemberList.clear();
-    }
-
-    public void refreshList(HashMap<String ,GroupMember> groupMemberList) {
-        this.groupMemberList.putAll(groupMemberList);
         notifyDataSetChanged();
     }
 

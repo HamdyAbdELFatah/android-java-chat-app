@@ -9,12 +9,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewPropertyAnimatorListener;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.View;

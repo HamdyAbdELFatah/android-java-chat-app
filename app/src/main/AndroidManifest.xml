@@ -12,11 +12,10 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/cc_small"
         android:supportsRtl="true"
-        android:appComponentFactory="null"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup,android:appComponentFactory">
+        tools:replace="android:allowBackup">
         <activity android:name=".Activity.MessageInfoActivity"></activity>
         <!-- <provider -->
         <!-- android:name="com.google.firebase.provider.FirebaseInitProvider" -->

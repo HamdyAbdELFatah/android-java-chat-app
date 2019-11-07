@@ -10,14 +10,14 @@ import com.cometchat.pro.models.GroupMember;
 import java.util.HashMap;
 import java.util.List;
 
-public interface BannedMemberListContract {
+public interface BanedMemberListContract {
 
-    interface BannedMemberListView{
+    interface BanedMemberListView{
 
         void setAdapter(HashMap<String ,GroupMember> list);
     }
 
-    interface BannedMemberListPresenter extends BasePresenter<BannedMemberListView>
+    interface BanedMemberListPresenter extends BasePresenter<BanedMemberListView>
     {
 
         void initMemberList(String groupId, int limit, Context context);

@@ -31,7 +31,6 @@ public interface MemberListFragmentContract {
 
         void updateScope(String uid, String groupId, GroupMemberListAdapter groupMemberListAdapter, String scope);
 
-        void addGroupEventListener(String listenerId,String groupId,GroupMemberListAdapter groupMemberListAdapter);
-
+        void addGroupEventListener(String listenerId, String groupId, GroupMemberListAdapter groupMemberListAdapter);
     }
 }

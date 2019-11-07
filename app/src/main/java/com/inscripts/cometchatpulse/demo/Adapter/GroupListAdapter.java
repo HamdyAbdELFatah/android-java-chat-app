@@ -69,7 +69,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         Drawable drawable = context.getResources().getDrawable(R.drawable.cc_ic_group);
         if (group.getIcon() != null && !group.getIcon().isEmpty()) {
 
-            Glide.with(context).load(group.getIcon()).into(groupHolder.imageViewGroupAvatar);
+           Glide.with(context).load(group.getIcon()).into(groupHolder.imageViewGroupAvatar);
         } else {
             try {
                 groupHolder.imageViewGroupAvatar.setCircleBackgroundColor(ColorUtils.getMaterialColor(context));
@@ -109,14 +109,13 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         notifyDataSetChanged();
     }
 
+    public void resetList() {
+        groupList.clear();
+    }
+
     public void removeGroup(String guid) {
         groupList.remove(guid);
         notifyDataSetChanged();
-    }
-
-
-    public void resetList() {
-        groupList.clear();
     }
 
 
@@ -124,7 +123,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
 
         public TextView groupNameField, unreadCount, usersOnline, usersOnlineMessage;
         public CircleImageView imageViewGroupAvatar;
-        ImageView protectedStatus;
+         ImageView protectedStatus;
         public RelativeLayout container;
 
         GroupHolder(@NonNull View itemView) {

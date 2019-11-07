@@ -3,16 +3,13 @@ package com.inscripts.cometchatpulse.demo.Presenters;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.models.Group;
 import com.inscripts.cometchatpulse.demo.Base.Presenter;
 import com.inscripts.cometchatpulse.demo.Contracts.CreateGroupActivityContract;
 import com.inscripts.cometchatpulse.demo.Utils.CommonUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import timber.log.Timber;
 
 
 public class CreateGroupActivityPresenter extends Presenter<CreateGroupActivityContract.CreateGroupView>
@@ -28,15 +25,13 @@ public class CreateGroupActivityPresenter extends Presenter<CreateGroupActivityC
             public void onSuccess(Group group) {
 
                 CommonUtils.startActivityIntent(group, context, true, null);
-
                 Toast.makeText(context, group.getGroupType() + " group created ", Toast.LENGTH_SHORT).show();
-
-                Log.d("createGroup", "onSuccess: "+group);
+                Timber.d("onSuccess: %s", group);
             }
 
             @Override
             public void onError(CometChatException e) {
-                Log.d("createGroup", "onError: "+e.getMessage());
+                Timber.d("onError: %s", e.getMessage());
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

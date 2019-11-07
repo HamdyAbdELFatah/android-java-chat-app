@@ -1,8 +1,7 @@
 package com.inscripts.cometchatpulse.demo.CustomView;
 
-import android.view.ViewGroup;
-
 import androidx.recyclerview.widget.RecyclerView;
+import android.view.ViewGroup;
 
 public interface StickyHeaderAdapter<T extends RecyclerView.ViewHolder> {
 

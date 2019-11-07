@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
@@ -21,14 +22,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.core.Call;
-import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.models.Action;
 import com.cometchat.pro.models.BaseMessage;
 import com.cometchat.pro.models.MediaMessage;
@@ -59,7 +56,6 @@ import com.inscripts.cometchatpulse.demo.ViewHolders.RightReplyViewHolder;
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -296,7 +292,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             textMessage = ((TextMessage) baseMessage);
         }
         if (baseMessage instanceof MediaMessage) {
-            mediaFile = ((MediaMessage) baseMessage).getAttachment().getFileUrl();
+            mediaFile = ((MediaMessage) baseMessage).getUrl();
             mediaMessage = ((MediaMessage) baseMessage);
 
         }
@@ -335,9 +331,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 rightMessageViewHolder.messageStatus.setVisibility(View.VISIBLE);
                 rightMessageViewHolder.textMessage.setTypeface(FontUtils.openSansRegular);
                 rightMessageViewHolder.messageStatus.setImageResource(R.drawable.ic_check_white_24dp);
-                setReadIcon(rightMessageViewHolder.messageStatus,baseMessage);
-                setDeliveryIcon(rightMessageViewHolder.messageStatus,baseMessage);
-
+                setStatusIcon(rightMessageViewHolder.messageStatus,baseMessage);
                 break;
             case LEFT_IMAGE_MESSAGE:
                 LeftImageVideoViewHolder leftImageViewHolder = (LeftImageVideoViewHolder) viewHolder;
@@ -365,6 +359,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 rightImageVideoViewHolder.messageTimeStamp.setText(timeStampString);
                 rightImageVideoViewHolder.btnPlayVideo.setVisibility(View.GONE);
                 rightImageVideoViewHolder.fileLoadingProgressBar.setVisibility(View.GONE);
+                setStatusIcon(rightImageVideoViewHolder.messageStatus,baseMessage);
                 if (mediaFile != null) {
 
                     RequestOptions RightrequestOptions = new RequestOptions().centerCrop()
@@ -374,8 +369,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     String finalMediaFile6 = mediaFile;
                     rightImageVideoViewHolder.imageMessage.setOnClickListener(view -> startIntent(finalMediaFile6, false));
                 }
-                setReadIcon(rightImageVideoViewHolder.messageStatus,baseMessage);
-                setDeliveryIcon(rightImageVideoViewHolder.messageStatus,baseMessage);
                 break;
             case ACTION_MESSAGE:
                 DateItemHolder actionHolder = (DateItemHolder) viewHolder;
@@ -436,8 +429,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
 
-                setReadIcon(rightVideoViewHolder.messageStatus,baseMessage);
-                setDeliveryIcon(rightVideoViewHolder.messageStatus,baseMessage);
+
 
                 break;
 
@@ -450,10 +442,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (!player.isPlaying()) {
                     rightAudioViewHolder.playAudio.setImageResource(R.drawable.ic_play_arrow);
                 }
-
-
-                setReadIcon(rightAudioViewHolder.messageStatus,baseMessage);
-                setDeliveryIcon(rightAudioViewHolder.messageStatus,baseMessage);
 
                 rightAudioViewHolder.audioSeekBar.setProgress(0);
                 String rightAudioPath = null;
@@ -742,8 +730,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     });
 
-                    setDeliveryIcon(rightFileViewHolder.messageStatus,baseMessage);
-                    setReadIcon(rightFileViewHolder.messageStatus,baseMessage);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -779,8 +766,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 RightReplyViewHolder rightTextReplyViewHolder = (RightReplyViewHolder) viewHolder;
                 rightTextReplyViewHolder.tvTimeStamp.setText(timeStampString);
 
-                setDeliveryIcon(rightTextReplyViewHolder.ivMessageStatus,baseMessage);
-                setReadIcon(rightTextReplyViewHolder.ivMessageStatus,baseMessage);
                 try {
                     if (textMessage != null) {
                         if (textMessage.getMetadata().has("senderUid")) {
@@ -909,8 +894,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 rightMediaReplyViewHolder.tvTimeStamp.setText(timeStampString);
 
-                setDeliveryIcon(rightMediaReplyViewHolder.ivMessageStatus,baseMessage);
-                setReadIcon(rightMediaReplyViewHolder.ivMessageStatus,baseMessage);
                 try {
                     if (mediaMessage != null) {
                         if (mediaMessage.getMetadata().has("senderUid")) {
@@ -963,7 +946,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             case CometChatConstants.MESSAGE_TYPE_IMAGE:
                                 rightMediaReplyViewHolder.rlImageContainer.setVisibility(View.VISIBLE);
 
-                                Glide.with(context).load(mediaMessage.getAttachment().getFileUrl()).into(rightMediaReplyViewHolder.ivNewImage);
+                                Glide.with(context).load(mediaMessage.getUrl()).into(rightMediaReplyViewHolder.ivNewImage);
                                 break;
 
                             case CometChatConstants.MESSAGE_TYPE_VIDEO:
@@ -971,17 +954,17 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 rightMediaReplyViewHolder.rlImageContainer.setVisibility(View.VISIBLE);
                                 rightMediaReplyViewHolder.ivPlayVideoButton.setVisibility(View.VISIBLE);
                                 rightMediaReplyViewHolder.tvReplyTextMessage.setVisibility(View.VISIBLE);
-                                String finalMediaFile5 = mediaMessage.getAttachment().getFileUrl();
+                                String finalMediaFile5 = mediaMessage.getUrl();
                                 rightMediaReplyViewHolder.ivPlayVideoButton.setOnClickListener(v -> startIntent(finalMediaFile5, true));
-                                Glide.with(context).load(mediaMessage.getAttachment().getFileUrl()).into(rightMediaReplyViewHolder.ivNewImage);
+                                Glide.with(context).load(mediaMessage.getUrl()).into(rightMediaReplyViewHolder.ivNewImage);
 
                                 break;
 
                             case CometChatConstants.MESSAGE_TYPE_FILE:
                                 rightMediaReplyViewHolder.rlFileContainer.setVisibility(View.VISIBLE);
-                                rightMediaReplyViewHolder.tvFileName.setText(getFileName(mediaMessage.getAttachment().getFileUrl()));
-                                rightMediaReplyViewHolder.tvFileType.setText(getFileExtension(mediaMessage.getAttachment().getFileUrl()));
-                                String media_File = mediaMessage.getAttachment().getFileUrl();
+                                rightMediaReplyViewHolder.tvFileName.setText(getFileName(mediaMessage.getUrl()));
+                                rightMediaReplyViewHolder.tvFileType.setText(getFileExtension(mediaMessage.getUrl()));
+                                String media_File = mediaMessage.getUrl();
                                 rightMediaReplyViewHolder.tvFileName.setOnClickListener(v -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(media_File))));
                                 break;
 
@@ -1125,7 +1108,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             case CometChatConstants.MESSAGE_TYPE_IMAGE:
                                 leftMediaReplyViewHolder.rlImageContainer.setVisibility(View.VISIBLE);
 
-                                Glide.with(context).load(mediaMessage.getAttachment().getFileUrl()).into(leftMediaReplyViewHolder.ivNewImage);
+                                Glide.with(context).load(mediaMessage.getUrl()).into(leftMediaReplyViewHolder.ivNewImage);
                                 break;
 
                             case CometChatConstants.MESSAGE_TYPE_VIDEO:
@@ -1133,17 +1116,17 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 leftMediaReplyViewHolder.rlImageContainer.setVisibility(View.VISIBLE);
                                 leftMediaReplyViewHolder.ivPlayVideoButton.setVisibility(View.VISIBLE);
                                 leftMediaReplyViewHolder.tvReplyTextMessage.setVisibility(View.VISIBLE);
-                                String finalMediaFile5 = mediaMessage.getAttachment().getFileUrl();
+                                String finalMediaFile5 = mediaMessage.getUrl();
                                 leftMediaReplyViewHolder.ivPlayVideoButton.setOnClickListener(v -> startIntent(finalMediaFile5, true));
-                                Glide.with(context).load(mediaMessage.getAttachment().getFileUrl()).into(leftMediaReplyViewHolder.ivNewImage);
+                                Glide.with(context).load(mediaMessage.getUrl()).into(leftMediaReplyViewHolder.ivNewImage);
 
                                 break;
 
                             case CometChatConstants.MESSAGE_TYPE_FILE:
                                 leftMediaReplyViewHolder.rlFileContainer.setVisibility(View.VISIBLE);
-                                leftMediaReplyViewHolder.tvFileName.setText(getFileName(mediaMessage.getAttachment().getFileUrl()));
-                                leftMediaReplyViewHolder.tvFileType.setText(getFileExtension(mediaMessage.getAttachment().getFileUrl()));
-                                String media_File = mediaMessage.getAttachment().getFileUrl();
+                                leftMediaReplyViewHolder.tvFileName.setText(getFileName(mediaMessage.getUrl()));
+                                leftMediaReplyViewHolder.tvFileType.setText(getFileExtension(mediaMessage.getUrl()));
+                                String media_File = mediaMessage.getUrl();
                                 leftMediaReplyViewHolder.tvFileName.setOnClickListener(v -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(media_File))));
                                 break;
 
@@ -1472,12 +1455,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemChanged(messageList.size());
     }
 
-
-    private void setDeliveryIcon(CircleImageView circleImageView,BaseMessage baseMessage){
-
-    }
-
-    private void setReadIcon(CircleImageView circleImageView,BaseMessage baseMessage){
+    private void setStatusIcon(CircleImageView circleImageView, BaseMessage baseMessage){
         if (baseMessage.getReadAt()!=0){
             circleImageView.setImageResource(R.drawable.ic_double_tick_blue);
             circleImageView.setCircleBackgroundColor(context.getResources().getColor(android.R.color.transparent));
@@ -1493,37 +1471,21 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setDelivered(MessageReceipt messageReceipt) {
-
-        for (int i = messageList.size() - 1; i >= 0; i--) {
-            if (messageList.get(messageList.keyAt(i)).getReadAt() > 0) {
-                break;
-            } else {
-                BaseMessage baseMessage = messageList.get(messageReceipt.getMessageId());
-                if (baseMessage!=null){
-                    baseMessage.setDeliveredAt(messageReceipt.getDeliveredAt());
-                    messageList.put(baseMessage.getId(),baseMessage);
-                }
-            }
+        BaseMessage baseMessage=messageList.get(messageReceipt.getMessageId());
+        if (baseMessage!=null) {
+            baseMessage.setDeliveredAt(messageReceipt.getTimestamp());
+            messageList.put(baseMessage.getId(), baseMessage);
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
-
     }
 
     public void setRead(MessageReceipt messageReceipt) {
-
-        for (int i = messageList.size() - 1; i >= 0; i--) {
-            if (messageList.get(messageList.keyAt(i)).getReadAt() > 0) {
-                break;
-            } else {
-                BaseMessage baseMessage = messageList.get(messageReceipt.getMessageId());
-                if (baseMessage!=null){
-                    baseMessage.setReadAt(messageReceipt.getReadAt());
-                    messageList.put(baseMessage.getId(),baseMessage);
-                }
-            }
+        BaseMessage baseMessage=messageList.get(messageReceipt.getMessageId());
+        if (baseMessage!=null) {
+            baseMessage.setReadAt(messageReceipt.getTimestamp());
+            messageList.put(baseMessage.getId(), baseMessage);
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
-
     }
 
     public void deleteMessage(BaseMessage baseMessage) {

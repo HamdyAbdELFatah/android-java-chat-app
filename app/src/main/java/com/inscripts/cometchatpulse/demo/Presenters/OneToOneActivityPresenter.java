@@ -13,7 +13,6 @@ import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.core.MessagesRequest;
 import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.models.BaseMessage;
-import com.cometchat.pro.models.Group;
 import com.cometchat.pro.models.MediaMessage;
 import com.cometchat.pro.models.MessageReceipt;
 import com.cometchat.pro.models.TextMessage;
@@ -37,8 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import timber.log.Timber;
-
 public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContract.OneToOneView>
         implements OneToOneActivityContract.OneToOnePresenter {
 
@@ -48,13 +45,12 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
     private MessagesRequest messagesRequest;
 
     private static final String TAG = "OneToOneActivityPresent";
-
     private Intent intent;
 
     @Override
     public void sendMessage(String message, String uId) {
 
-       TextMessage textMessage = new TextMessage(uId, message, CometChatConstants.RECEIVER_TYPE_USER);
+       TextMessage textMessage = new TextMessage(uId, message,CometChatConstants.MESSAGE_TYPE_TEXT, CometChatConstants.RECEIVER_TYPE_USER);
 
         if (OneToOneChatActivity.isReply) {
             textMessage.setMetadata(OneToOneChatActivity.metaData);
@@ -74,7 +70,6 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
              @Override
             public void onError(CometChatException e) {
                 Log.d(TAG, "sendMessage onError: " + e.getMessage());
-                showToast(e.getMessage());
             }
         });
 
@@ -101,7 +96,7 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
             CometChat.getUser(uid, new CometChat.CallbackListener<User>() {
                 @Override
                 public void onSuccess(User user) {
-                    Timber.d("getUser onSuccess: %s", user.toString());
+                        Log.d(TAG, "getUser onSuccess: "+user.toString());
                         if (isViewAttached())
                         getBaseView().setPresence(user);
 
@@ -109,8 +104,8 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
                 @Override
                 public void onError(CometChatException e) {
-                    Timber.d("getUser onError: %s", e.getMessage());
-                   showToast(e.getMessage());
+                    Log.d(TAG, "getUser onError: " + e.getMessage());
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -133,12 +128,12 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
             public void onTextMessageReceived(TextMessage message) {
                 if (isViewAttached()) {
                     Log.d(TAG, "onTextMessageReceived: "+message.toString());
-                    if (message.getSender().getUid().equals(contactUid)) {
+                    if (message.getSender().getUid().equals(contactUid)&&message.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
                         MediaUtils.playSendSound(context, R.raw.receive);
                         Log.d(TAG, "onTextMessageReceived: "+message.toString());
                         if (message.getReadAt()==0){
                             Log.d(TAG, "onTextMessageReceived: getReadAt "+message.toString());
-                            CometChat.markAsRead(message.getId(),message.getSender().getUid(),message.getReceiverType());
+                            CometChat.markMessageAsRead(message);
                         }
                         getBaseView().addSendMessage(message);
                     }
@@ -148,10 +143,10 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
             @Override
             public void onMediaMessageReceived(MediaMessage message) {
                 if (isViewAttached()) {
-                    if (message.getSender().getUid().equals(contactUid)) {
+                    if (message.getSender().getUid().equals(contactUid)&&message.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
                         if (message.getReadAt()==0){
                             Log.d(TAG, "onMediaMessageReceived: getReadAt "+message.toString());
-                            CometChat.markAsRead(message.getId(),message.getSender().getUid(),message.getReceiverType());
+                            CometChat.markMessageAsRead(message);
                         }
                         MediaUtils.playSendSound(context, R.raw.receive);
                         getBaseView().addSendMessage(message);
@@ -161,52 +156,39 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
             @Override
             public void onTypingStarted(TypingIndicator typingIndicator) {
-                if (typingIndicator.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-                    getBaseView().setTyping();
-                    Log.d(TAG, "onTypingStarted: ");
-                }
+                getBaseView().setTyping();
+                Log.d(TAG, "onTypingStarted: ");
             }
 
             @Override
             public void onTypingEnded(TypingIndicator typingIndicator) {
-                if (typingIndicator.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-                    getBaseView().endTyping();
-                    Log.d(TAG, "onTypingEnded:");
-                }
+                getBaseView().endTyping();
+                Log.d(TAG, "onTypingEnded:");
             }
 
             @Override
-            public void onMessagesDelivered(MessageReceipt messageReceipt) {
-                if (messageReceipt.getReceivertype().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-                    getBaseView().setMessageDelivered(messageReceipt);
-                    Log.d(TAG, "onMessagesDelivered: " + messageReceipt);
-                }
+            public void onMessageDelivered(MessageReceipt messageReceipt) {
+                getBaseView().setMessageDelivered(messageReceipt);
+                Log.d(TAG, "onMessagesDelivered: "+messageReceipt);;
             }
 
             @Override
-            public void onMessagesRead(MessageReceipt messageReceipt) {
-                if (messageReceipt.getReceivertype().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-                    getBaseView().onMessageRead(messageReceipt);
-                    Log.d(TAG, "onMessagesRead: " + messageReceipt);
-
-                }
+            public void onMessageRead(MessageReceipt messageReceipt) {
+                getBaseView().onMessageRead(messageReceipt);
+                Log.d(TAG, "onMessagesRead: "+messageReceipt);
             }
 
 
             @Override
             public void onMessageEdited(BaseMessage message) {
-                if (message.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-                    getBaseView().setEditedMessage(message);
-                    Log.d(TAG, "onMessageEdited: " + message.toString());
-                }
+                getBaseView().setEditedMessage(message);
+                Log.d(TAG, "onMessageEdited: "+message.toString());
             }
 
             @Override
             public void onMessageDeleted(BaseMessage message) {
-                if (message.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-                    getBaseView().setDeletedMessage(message);
-                    Log.d(TAG, "onMessageDeleted: " + message.toString());
-                }
+                getBaseView().setDeletedMessage(message);
+                Log.d(TAG, "onMessageDeleted: "+message.toString());
             }
 
         });
@@ -266,17 +248,14 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
                         for (BaseMessage baseMessage : baseMessages) {
 
                             Log.d(TAG, "fetchPreviousMessage onSuccess: delete "+baseMessage.getDeletedAt());
-
+                            CometChat.markMessageAsRead(baseMessage);
                             Log.d(TAG, "fetchPreviousMessage onSuccess: "+baseMessage.toString());
                             if (!baseMessage.getCategory().equals(CometChatConstants.CATEGORY_ACTION)&&baseMessage.getDeletedAt()==0) {
 
                                 list.add(baseMessage);
                             }
                         }
-                        if (baseMessages.size()!=0) {
-                            BaseMessage baseMessage=baseMessages.get(baseMessages.size()-1);
-                            CometChat.markAsRead(baseMessage.getId(),baseMessage.getSender().getUid(),baseMessage.getReceiverType());
-                        }
+
                         getBaseView().setAdapter(list);
                     }
                 }
@@ -298,14 +277,14 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
                     if (baseMessages.size() != 0) {
                         if (isViewAttached()) {
                             for (BaseMessage baseMessage : baseMessages) {
+
+                                CometChat.markMessageAsRead(baseMessage);
+
                                 if (!baseMessage.getCategory().equals(CometChatConstants.CATEGORY_ACTION)&&baseMessage.getDeletedAt()==0) {
                                     list.add(baseMessage);
                                 }
                             }
-                            if (baseMessages.size()!=0) {
-                                BaseMessage baseMessage=baseMessages.get(baseMessages.size()-1);
-                                CometChat.markAsRead(baseMessage.getId(),baseMessage.getSender().getUid(),baseMessage.getReceiverType());
-                            }
+
                             getBaseView().setAdapter(list);
                         }
                     }
@@ -313,7 +292,7 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
                 @Override
                 public void onError(CometChatException e) {
-                   showToast(e.getMessage());
+                  showToast(e.getMessage());
                 }
 
             });
@@ -359,7 +338,7 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
             @Override
             public void onError(CometChatException e) {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+               showToast(e.getMessage());
             }
 
         });
@@ -371,17 +350,7 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
         CometChat.addCallListener(callEventListener, new CometChat.CallListener() {
             @Override
             public void onIncomingCallReceived(Call call) {
-
-                if(call.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_USER)) {
-
-                    CommonUtils.startCallIntent(context, (User) call.getCallInitiator(), call.getType(),
-                            false, call.getSessionId());
-                }
-                else if(call.getReceiverType().equals(CometChatConstants.RECEIVER_TYPE_GROUP)) {
-
-                    CommonUtils.startCallIntent(context, (Group) call.getCallReceiver(), call.getType(),
-                            false, call.getSessionId());
-                }
+              CommonUtils.startCallIntent(context, (User) call.getCallInitiator(), call.getType(), false, call.getSessionId());
             }
             @Override
             public void onOutgoingCallAccepted(Call call) {
@@ -436,10 +405,14 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
                 if (intent!=null){
                     handleIntent(intent);
                 }
+
+                getBaseView().showBanner();
+
             }
 
             @Override
             public void onError(CometChatException e) {
+                Log.d(TAG, "blockUsers onError: "+e.getMessage());
                 showToast(e.getMessage());
             }
         });
@@ -453,15 +426,15 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
             @Override
             public void onSuccess(HashMap<String, String> stringStringHashMap) {
                 Toast.makeText(context, "Unblocked Successfully", Toast.LENGTH_SHORT).show();
-                getBaseView().hideBanner();
-                if (intent!=null){
-                    handleIntent(intent);
-                }
+                 getBaseView().hideBanner();
+                 if (intent!=null){
+                     handleIntent(intent);
+                 }
             }
 
             @Override
             public void onError(CometChatException e) {
-                showToast(e.getMessage());
+            showToast(e.getMessage());
             }
         });
     }
@@ -485,7 +458,7 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
     @Override
     public void editMessage(BaseMessage baseMessage,String newMessage) {
-        TextMessage textMessage=new TextMessage(baseMessage.getReceiverUid(),newMessage,baseMessage.getReceiverType());
+        TextMessage textMessage=new TextMessage(baseMessage.getReceiverUid(),newMessage,CometChatConstants.MESSAGE_TYPE_TEXT,baseMessage.getReceiverType());
        textMessage.setId(baseMessage.getId());
       CometChat.editMessage(textMessage, new CometChat.CallbackListener<BaseMessage>() {
           @Override
@@ -496,7 +469,8 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
           @Override
           public void onError(CometChatException e) {
-             showToast(e.getMessage());
+              Log.d(TAG, "editMessage onError: "+e.getMessage());
+              showToast(e.getMessage());
           }
       });
     }
@@ -525,7 +499,8 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
                 @Override
                 public void onError(CometChatException e) {
-                   showToast(e.getMessage());
+                    Log.d(TAG, "searchMessage onError: "+e.getMessage());
+                    showToast(e.getMessage());
                 }
             });
 
@@ -552,6 +527,5 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
     private void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-
 
 }

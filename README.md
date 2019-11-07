@@ -31,35 +31,11 @@ CometChat Android Demo app (built using **CometChat Pro**) is a fully functional
    Simply Clone the project from android-java-chat-app repository and open in Android Studio.
    Build the Demo App and it will be ready to Run
 
-  ## v2 Apps
+## Note
 
-To run our open source app with CometChat Pro v2, follow these steps:
-
-1. Navigate to v2 folder
-
--  modify *APP_ID* and *API_KEY* with your own **ApiKey** , **AppId** and **REGION**
-
-        `public static final String APP_ID  = "XXXXXXXXX";`
-
-       ` public static final String API_KEY = "XXXXXXXXX";`
-       
-        `public static final String REGION  = "XXXXXXXXX";`
-
-2. Build and run the Sample App.
-
-## v1 Apps
-
-To run our open source app with CometChat Pro v1, follow these steps:
-
-1. Navigate to v1 folder
-
--  modify *APP_ID* and *API_KEY* with your own **ApiKey** and **AppId**
-
-       `public static final String APP_ID  = "XXXXXXXXX";`
-
-       ` public static final String API_KEY = "XXXXXXXXX";`
-       
-2. Build and run the Sample App.
+   Branch v1.8 contains UI with SDK v1.8+ .
+   
+   Branch v2.0 contains UI with SDK v2.0+ . Apps created in v2 requires Region. Branch v2 and master contains CometChat Pro    SDK with latest feature and updates
 
 
 
@@ -75,11 +51,13 @@ To run our open source app with CometChat Pro v1, follow these steps:
 
    - Under class `StringContract.class`  go to static `class` named `AppDetails`
 
-   -  modify *APP_ID* and *API_KEY* with your own **ApiKey** and **AppId**
+   -  modify *APP_ID* and *API_KEY* with your own **ApiKey** and **AppId** 
 
         `public static final String APP_ID  = "XXXXXXXXX";`
 
        ` public static final String API_KEY = "XXXXXXXXX";`
+       
+       ` public static final String REGION = "XXXXXXXXX";`
        
 
 ## Note
@@ -94,29 +72,25 @@ To run our open source app with CometChat Pro v1, follow these steps:
 
 
 
-  ![Studio Guide](https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/ScreenShots/guide.png)                                    
-
-
-
-
+  ![Studio Guide](https://github.com/cometchat-pro-samples/android-java-chat-app/blob/master/ScreenShots/help.png)                                    
 
 
 
 ## Screenshots
 
-   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/v2/ScreenShots/gif1.gif">
+   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/ScreenShots/gif1.gif">
 
 
-   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/v2/ScreenShots/gif2.gif">
+   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/ScreenShots/gif2.gif">
 
 
-   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/v2/ScreenShots/gif3.gif">
+   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/ScreenShots/gif3.gif">
 
 
 
-   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/v2/ScreenShots/gif4.gif">
+   <img align="left" width="185" height="331" src="https://github.com/CometChat-Pulse/android-java-chat-app/blob/master/ScreenShots/gif4.gif">
 
-`            `<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br></br>
+`            `<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
 
 
 ## Contribute

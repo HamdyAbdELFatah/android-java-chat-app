@@ -1,21 +1,24 @@
 package com.inscripts.cometchatpulse.demo.Activity;
 
-
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.cometchat.pro.models.User;
 import com.inscripts.cometchatpulse.demo.Adapter.ContactListAdapter;
 import com.inscripts.cometchatpulse.demo.Contracts.SelectUserActivityContract;
 import com.inscripts.cometchatpulse.demo.Helper.RecyclerTouchListener;
 import com.inscripts.cometchatpulse.demo.Presenters.SelectUserActivityPresenter;
 import com.inscripts.cometchatpulse.demo.R;
+
 import java.util.HashMap;
 import java.util.Set;
 

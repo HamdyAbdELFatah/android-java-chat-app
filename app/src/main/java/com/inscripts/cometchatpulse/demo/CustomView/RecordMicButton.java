@@ -3,20 +3,18 @@ package com.inscripts.cometchatpulse.demo.CustomView;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Helper.OnRecordClickListener;
 import com.inscripts.cometchatpulse.demo.Utils.AnimUtil;
 
-public class RecordMicButton extends AppCompatImageView implements View.OnTouchListener, View.OnClickListener {
+public class RecordMicButton extends androidx.appcompat.widget.AppCompatImageView implements View.OnTouchListener, View.OnClickListener {
 
     private View scaleView;
 

@@ -2,32 +2,27 @@ package com.inscripts.cometchatpulse.demo.Activity;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.os.Build;
 import android.os.Bundle;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.models.Group;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Contracts.CreateGroupActivityContract;
-import com.inscripts.cometchatpulse.demo.Contracts.StringContract;
 import com.inscripts.cometchatpulse.demo.Presenters.CreateGroupActivityPresenter;
-import com.inscripts.cometchatpulse.demo.Utils.AnimUtil;
 import com.inscripts.cometchatpulse.demo.Utils.FontUtils;
 
 

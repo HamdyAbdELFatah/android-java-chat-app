@@ -54,6 +54,9 @@ public interface OneToOneActivityContract {
         void setEditedMessage(BaseMessage baseMessage);
 
         void setFilterList(List<BaseMessage> list);
+
+        void showBanner();
+
     }
 
     interface OneToOnePresenter extends BasePresenter<OneToOneView> {

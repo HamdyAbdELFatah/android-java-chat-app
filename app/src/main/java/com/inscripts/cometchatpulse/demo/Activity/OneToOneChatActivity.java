@@ -1,6 +1,7 @@
 package com.inscripts.cometchatpulse.demo.Activity;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,13 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -30,18 +38,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.cometchat.pro.constants.CometChatConstants;
-import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.models.BaseMessage;
 import com.cometchat.pro.models.MediaMessage;
 import com.cometchat.pro.models.MessageReceipt;
@@ -69,8 +67,10 @@ import com.inscripts.cometchatpulse.demo.Utils.FontUtils;
 import com.inscripts.cometchatpulse.demo.Utils.KeyboardVisibilityEvent;
 import com.inscripts.cometchatpulse.demo.Utils.Logger;
 import com.inscripts.cometchatpulse.demo.Utils.MediaUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -129,6 +129,10 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     private RecordAudio recordAudioLayout;
 
+    private AlertDialog.Builder alertDialog;
+
+    private Menu menu;
+
     public static String[] RECORD_PERMISSION = {CCPermissionHelper.REQUEST_PERMISSION_RECORD_AUDIO,
             CCPermissionHelper.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE};
 
@@ -147,7 +151,7 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     private BaseMessage baseMessage;
 
-    private  static RelativeLayout rlMain;
+    private static RelativeLayout rlMain;
 
     private static RelativeLayout rlReplyContainer;
 
@@ -157,11 +161,11 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     private ImageView ivReplyImage;
 
-    public static  String contactId;
+    public static String contactId;
 
     private User user;
 
-    private Timer timer=new Timer();
+    private Timer timer = new Timer();
 
     private TextView tvBanner;
 
@@ -172,8 +176,6 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
     private MenuItem searchItem;
 
     private SearchView searchView;
-
-    private AlertDialog.Builder alertDialog;
 
 
     @Override
@@ -191,7 +193,6 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     private void initViewComponent() {
 
-
         ivAttchament = findViewById(R.id.iv_attchment);
         ivAttchament.setOnClickListener(this);
         sendButton = findViewById(R.id.buttonSendMessage);
@@ -199,9 +200,8 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
         recordMicButton = findViewById(R.id.record_button);
         recordAudioLayout = findViewById(R.id.record_audio_view);
-        tvBanner=findViewById(R.id.tvBlock);
-        rvBanner=findViewById(R.id.blockBanner);
-
+        tvBanner = findViewById(R.id.tvBlock);
+        rvBanner = findViewById(R.id.blockBanner);
         rvBanner.setOnClickListener(this);
 
         //set recordAudioview
@@ -226,11 +226,10 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
         tvNameReply = findViewById(R.id.tvNameReply);
         tvTextMessage = findViewById(R.id.tvTextMessage);
         ivReplyImage = findViewById(R.id.ivReplyImage);
-        rlMain=findViewById(R.id.rl_main);
+        rlMain = findViewById(R.id.rl_main);
         ImageView ivClose = findViewById(R.id.ivClose);
 
         linearLayoutManager = new LinearLayoutManager(this);
-
 
         messageRecyclerView.setLayoutManager(linearLayoutManager);
         messageRecyclerView.getItemAnimator().setChangeDuration(0);
@@ -284,7 +283,6 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
             });
         }
 
-
         KeyboardVisibilityEvent.setEventListener(this, var1 -> {
             if (messageCount - linearLayoutManager.findLastVisibleItemPosition() < 5) {
 
@@ -301,12 +299,10 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
             public void onClick(View var1, int var2) {
 
             }
-
             @Override
             public void onLongClick(View var1, int var2) {
                 baseMessage = (BaseMessage) var1.getTag(R.string.message);
                 toolbar.startActionMode(OneToOneChatActivity.this);
-
 
 
             }
@@ -334,16 +330,13 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
                 if (btnScroll.getVisibility() == View.VISIBLE) {
                     btnScroll.startAnimation(goneAnimation);
                     btnScroll.setVisibility(View.GONE);
-
                 }
-
             } else {
                 if (btnScroll.getVisibility() == View.GONE) {
                     btnScroll.startAnimation(viewAniamtion);
                     btnScroll.setVisibility(View.VISIBLE);
                 }
             }
-
             if (messageCount - 2 == linearLayoutManager.findLastVisibleItemPosition()) {
                 newMessageCount = 0;
                 btnScroll.setText(getString(R.string.jump_to_latest));
@@ -352,7 +345,6 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
         });
 
     }
-
 
     private void setRecordListener() {
         recordAudioLayout.setOnRecordListener(new RecordListener() {
@@ -398,28 +390,21 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Logger.error(TAG, "onDestroy: ");
-        oneToOnePresenter.detach();
-        timer=null;
-
-    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.one_to_one_chat_menu, menu);
 
+          this.menu=menu;
 
-        searchItem=menu.findItem(R.id.app_bar_search);
+          searchItem = menu.findItem(R.id.app_bar_search);
 
-        SearchManager searchManager=((SearchManager)getSystemService(Context.SEARCH_SERVICE));
+        SearchManager searchManager = ((SearchManager) getSystemService(Context.SEARCH_SERVICE));
 
-        if (searchItem!=null){
+        if (searchItem != null) {
 
-            searchView=((SearchView)searchItem.getActionView());
+            searchView = ((SearchView) searchItem.getActionView());
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -429,21 +414,18 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    oneToOnePresenter.searchMessage(s,contactUid);
+                    oneToOnePresenter.searchMessage(s, contactUid);
                     return false;
                 }
             });
 
-            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-                @Override
-                public boolean onClose() {
-                    oneToOnePresenter.fetchPreviousMessage(contactUid,30);
-                    return false;
-                }
+            searchView.setOnCloseListener(() -> {
+                oneToOnePresenter.fetchPreviousMessage(contactUid, 30);
+                return false;
             });
         }
 
-        if (searchView!=null){
+        if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         }
 
@@ -475,7 +457,12 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
                 break;
 
             case R.id.menu_block_user:
-                oneToOnePresenter.blockUser(contactId);
+                if (user.isBlockedByMe()) {
+                    oneToOnePresenter.unBlockUser(contactUid, OneToOneChatActivity.this);
+                } else {
+                    oneToOnePresenter.blockUser(contactId);
+                }
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -487,7 +474,7 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
         alertDialog.setCancelable(false);
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton("Unblock", (dialog, which) -> {
-            oneToOnePresenter.unBlockUser(user.getUid(),OneToOneChatActivity.this);
+         oneToOnePresenter.unBlockUser(user.getUid(),OneToOneChatActivity.this);
         });
         alertDialog.setNegativeButton("Cancel", (dialog, which) -> {
             dialog.dismiss();
@@ -670,7 +657,7 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
         Logger.error(TAG, "onResume: ");
         oneToOnePresenter.addPresenceListener(getString(R.string.presenceListener));
         oneToOnePresenter.addMessageReceiveListener(contactUid);
-        oneToOnePresenter.refreshList(contactUid,LIMIT);
+        oneToOnePresenter.refreshList(contactUid, LIMIT);
         oneToOnePresenter.addCallEventListener(TAG);
     }
 
@@ -679,7 +666,7 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
         super.onPause();
 
         Logger.error(TAG, "onPause: ");
-        if (oneToOneAdapter!=null) {
+        if (oneToOneAdapter != null) {
             oneToOneAdapter.stopPlayer();
         }
         timer();
@@ -690,12 +677,28 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Logger.error(TAG, "onDestroy: ");
+        oneToOnePresenter.removeMessageLisenter(getString(R.string.message_listener));
+        oneToOnePresenter.removePresenceListener(getString(R.string.presenceListener));
+        oneToOnePresenter.removeCallListener(TAG);
+        oneToOnePresenter.detach();
+        timer = null;
+
+    }
+
+
+    @Override
     protected void onStop() {
         super.onStop();
 
         stopRecording(false);
         timer();
         Logger.error(TAG, "onStop:");
+        oneToOnePresenter.removeMessageLisenter(getString(R.string.message_listener));
+        oneToOnePresenter.removePresenceListener(getString(R.string.presenceListener));
+        oneToOnePresenter.removeCallListener(TAG);
 
     }
 
@@ -827,25 +830,29 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
     @Override
     public void setPresence(User user) {
 
-        if (user != null && user.getUid().equals(contactUid)) {
-            this.user=user;
-            if (user.getStatus().equals(CometChatConstants.USER_STATUS_ONLINE)) {
-                userStatus = user.getStatus();
-            } else if (user.getStatus().equals(CometChatConstants.USER_STATUS_OFFLINE)) {
-                userStatus = DateUtils.getLastSeenDate(user.getLastActiveAt(), this);
-            }
+        if (user!=null) {
+            if (user.getUid().equals(contactUid)) {
+                this.user = user;
+                if (user.getStatus().equals(CometChatConstants.USER_STATUS_ONLINE)) {
+                    userStatus = user.getStatus();
+                } else if (user.getStatus().equals(CometChatConstants.USER_STATUS_OFFLINE)) {
+                    userStatus = DateUtils.getLastSeenDate(user.getLastActiveAt(), this);
+                }
 
-            toolbarSubTitle.setText(userStatus);
-        }
-        if (user!=null&&user.isBlockedByMe()){
+                toolbarSubTitle.setText(userStatus);
+            }
+            if (user.isBlockedByMe()) {
                 rvBanner.setVisibility(View.VISIBLE);
-                tvBanner.setText("Tab to unblock "+user.getName());
+                tvBanner.setText("Tab to unblock ");
+                menu.findItem(R.id.menu_block_user).setTitle("Unblock");
+            } else {
+                menu.findItem(R.id.menu_block_user).setTitle("Block");
+            }
         }
     }
 
     @Override
     public void setTyping() {
-
         toolbarSubTitle.setText(getString(R.string.typing));
     }
 
@@ -862,22 +869,22 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     @Override
     public void setMessageDelivered(MessageReceipt messageReceipt) {
-        if (oneToOneAdapter!=null)
-        oneToOneAdapter.Delivered(messageReceipt);
+        if (oneToOneAdapter != null)
+            oneToOneAdapter.Delivered(messageReceipt);
     }
 
     @Override
     public void onMessageRead(MessageReceipt messageReceipt) {
-        if (oneToOneAdapter!=null)
+        if (oneToOneAdapter != null)
             oneToOneAdapter.setRead(messageReceipt);
     }
 
     @Override
     public void hideBanner() {
-        rvBanner.setVisibility(View.GONE);
-        if (alertDialog!=null){
-            alertDialog.setOnDismissListener(DialogInterface::dismiss);
-        }
+      rvBanner.setVisibility(View.GONE);
+      if (alertDialog!=null){
+          alertDialog.setOnDismissListener(DialogInterface::dismiss);
+      }
 
     }
 
@@ -893,21 +900,19 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
                 String message = messageField.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(message)&&!isEditMessage) {
+                if (!TextUtils.isEmpty(message) && !isEditMessage) {
                     oneToOnePresenter.endTypingIndicator(contactUid);
                     oneToOnePresenter.sendMessage(message, contactUid);
                     messageField.setText("");
-                }
-                else if (isEditMessage&&!TextUtils.isEmpty(message)){
-                    isEditMessage=false;
-                    oneToOnePresenter.editMessage(baseMessage,message);
+                } else if (isEditMessage && !TextUtils.isEmpty(message)) {
+                    isEditMessage = false;
+                    oneToOnePresenter.editMessage(baseMessage, message);
                     messageField.setText("");
                 }
-
                 break;
 
             case R.id.blockBanner:
-                  oneToOnePresenter.unBlockUser(user.getUid(),OneToOneChatActivity.this);
+                oneToOnePresenter.unBlockUser(user.getUid(), OneToOneChatActivity.this);
                 break;
 
             case R.id.rl_titlecontainer:
@@ -932,10 +937,9 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
     }
 
 
-    public static void hideReply(){
-
-        metaData=null;
-        isReply=false;
+    public static void hideReply() {
+        metaData = null;
+        isReply = false;
         rlReplyContainer.setVisibility(View.GONE);
     }
 
@@ -952,7 +956,7 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
         if (len > 0) {
             sendButton.setTextColor(getResources().getColor(R.color.secondaryDarkColor));
-             oneToOnePresenter.sendTypingIndicator(contactUid);
+            oneToOnePresenter.sendTypingIndicator(contactUid);
 
         } else {
             sendButton.setTextColor(getResources().getColor(R.color.secondaryTextColor));
@@ -962,24 +966,23 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if (timer!=null){
+        if (timer != null) {
             timer();
-        }
-        else {
-            timer=new Timer();
+        } else {
+            timer = new Timer();
             timer();
         }
 
     }
 
-    private void timer(){
+    private void timer() {
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 oneToOnePresenter.endTypingIndicator(contactUid);
             }
-        },2000);
+        }, 2000);
     }
 
     private void showPopUp() {
@@ -998,17 +1001,16 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
         getMenuInflater().inflate(R.menu.action_mode, menu);
 
         mode.setTitle(contactName);
+
         menu.findItem(R.id.info).setVisible(false);
-        if (menu!=null&&baseMessage!=null){
+        if (menu != null && baseMessage != null) {
             if (!baseMessage.getSender().getUid().equals(ownerUid)) {
                 menu.findItem(R.id.delete).setVisible(false);
             }
 
-            if (!baseMessage.getSender().getUid().equals(ownerUid) && baseMessage.getType().equals(CometChatConstants.MESSAGE_TYPE_TEXT)){
-                 menu.findItem(R.id.edit).setVisible(false);
+            if (!baseMessage.getSender().getUid().equals(ownerUid) && baseMessage.getType().equals(CometChatConstants.MESSAGE_TYPE_TEXT)) {
+                menu.findItem(R.id.edit).setVisible(false);
             }
-
-
         }
 
         return true;
@@ -1021,43 +1023,49 @@ public class OneToOneChatActivity extends AppCompatActivity implements OneToOneA
 
     @Override
     public void setDeletedMessage(BaseMessage baseMessage) {
-         if (oneToOneAdapter!=null){
+        if (oneToOneAdapter != null) {
             oneToOneAdapter.deleteMessage(baseMessage);
-         }
+        }
     }
 
     @Override
     public void setEditedMessage(BaseMessage baseMessage) {
-        if (oneToOneAdapter!=null){
+        if (oneToOneAdapter != null) {
             oneToOneAdapter.setEditMessage(baseMessage);
         }
     }
 
     @Override
     public void setFilterList(List<BaseMessage> list) {
-          if (oneToOneAdapter!=null){
-           oneToOneAdapter.setFilterList(list);
-          }
+        if (oneToOneAdapter != null) {
+            oneToOneAdapter.setFilterList(list);
+        }
+    }
+
+    @Override
+    public void showBanner() {
+       tvBanner.setText("Tab to unblock");
+       rvBanner.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
 
         mode.finish();
 
         switch (item.getItemId()) {
 
             case R.id.delete:
-               oneToOnePresenter.deleteMessage(baseMessage);
+                oneToOnePresenter.deleteMessage(baseMessage);
                 break;
             case R.id.edit:
                 TextMessage textMessage;
-                    isEditMessage=true;
-                  if (baseMessage instanceof TextMessage){
-                      textMessage=(TextMessage)baseMessage;
-                      messageField.setText(textMessage.getText());
-                  }
+                isEditMessage = true;
+                if (baseMessage instanceof TextMessage) {
+                    textMessage = (TextMessage) baseMessage;
+                    messageField.setText(textMessage.getText());
+                }
                 break;
         }
 

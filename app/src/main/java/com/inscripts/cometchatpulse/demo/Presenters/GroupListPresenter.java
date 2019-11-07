@@ -60,7 +60,6 @@ public class GroupListPresenter extends Presenter<GroupListContract.GroupView> i
             @Override
             public void onError(CometChatException e) {
                 Timber.d("onError: %s", e.getMessage());
-
             }
 
         });
@@ -82,9 +81,9 @@ public class GroupListPresenter extends Presenter<GroupListContract.GroupView> i
 
             @Override
             public void onError(CometChatException e) {
-                Log.d("joinGroup", "onError: " + e.getMessage());
-                progressDialog.dismiss();
+                Log.d("joinGroup", "onError: " + e.getMessage()+e.getCode());
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
 
 
@@ -138,6 +137,5 @@ public class GroupListPresenter extends Presenter<GroupListContract.GroupView> i
             }
         });
     }
-
 
 }

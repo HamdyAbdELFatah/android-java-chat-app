@@ -1,6 +1,5 @@
 package com.inscripts.cometchatpulse.demo.Presenters;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -24,14 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MemberListFragmentPresenter extends Presenter<MemberListFragmentContract.MemberListFragmentView>
-        implements MemberListFragmentContract.MemberListFragmentPresenter {
+    implements MemberListFragmentContract.MemberListFragmentPresenter {
 
-    private String TAG = "MemberListFragmentPresenter";
     private GroupMembersRequest groupMembersRequest;
 
     private Context context;
 
     HashMap<String ,GroupMember> groupMemberHashMap=new HashMap<>();
+
+    private String TAG = "MemberListFragmentPresenter";
 
     @Override
     public void initMemberList(String guid, int LIMIT,Context context) {
@@ -39,12 +39,12 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
         this.context=context;
 
 
-        if (groupMembersRequest==null)
-        {
-            groupMembersRequest=new GroupMembersRequest.GroupMembersRequestBuilder(guid).setLimit(LIMIT).build();
+        if (groupMembersRequest==null) {
+            groupMembersRequest = new GroupMembersRequest.GroupMembersRequestBuilder(guid).setLimit(LIMIT).build();
         }
 
         setGroupMembersRequest(groupMembersRequest);
+
 
     }
 
@@ -68,6 +68,7 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
 
         });
     }
+
 
     @Override
     public void outCastUser(final String uid, String groupGuid, final GroupMemberListAdapter groupMemberListAdapter) {
@@ -106,6 +107,12 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
     }
 
     @Override
+    public void refresh(String GUID, int LIMIT,Context context) {
+        groupMembersRequest=null;
+        initMemberList(GUID,LIMIT,context);
+    }
+
+    @Override
     public void updateScope(String uid, String groupId, GroupMemberListAdapter groupMemberListAdapter, String scope) {
         CometChat.updateGroupMemberScope(uid, groupId, scope, new CometChat.CallbackListener<String>() {
             @Override
@@ -121,19 +128,8 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
     }
 
     @Override
-    public void addGroupEventListener(String listenerId, String groupId,final GroupMemberListAdapter groupMemberListAdapter) {
+    public void addGroupEventListener(String listenerId, String groupId, GroupMemberListAdapter groupMemberListAdapter) {
         CometChat.addGroupListener(listenerId, new CometChat.GroupListener() {
-            @Override
-            public void onGroupMemberKicked(Action action, User kickedUser, User kickedBy, Group kickedFrom) {
-                Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
-                Log.e(TAG, "onGroupMemberKicked: "+kickedUser.getUid());
-                if (kickedUser.getUid().equals(CometChat.getLoggedInUser().getUid())) {
-                    context.startActivity(new Intent(context,CometChatActivity.class));
-                } else {
-                    groupMemberListAdapter.removeMember(kickedUser.getUid());
-                }
-            }
-
             @Override
             public void onGroupMemberJoined(Action action, User joinedUser, Group joinedGroup) {
                 Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
@@ -142,14 +138,8 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
             }
 
             @Override
-            public void onMemberAddedToGroup(Action action, User addedby, User userAdded, Group addedTo) {
-                Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
-                groupMemberListAdapter.addMember(userAdded.getUid(),UserToGroupMember(userAdded,action));
-            }
-
-            @Override
             public void onGroupMemberLeft(Action action, User leftUser, Group leftGroup) {
-                Toast.makeText(context, "Group Member:" + action.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
                 if (leftUser.getUid().equals(CometChat.getLoggedInUser().getUid())) {
                     context.startActivity(new Intent(context, CometChatActivity.class));
                 } else {
@@ -158,8 +148,19 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
             }
 
             @Override
-            public void onGroupMemberBanned(Action action, User bannedUser, User bannedBy, Group bannedFrom) {
+            public void onGroupMemberKicked(Action action, User kickedUser, User kickedBy, Group kickedFrom) {
                 Toast.makeText(context, "Group Member:" + action.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "onGroupMemberKicked: " + kickedUser.getUid());
+                if (kickedUser.getUid().equals(CometChat.getLoggedInUser().getUid())) {
+                    context.startActivity(new Intent(context,CometChatActivity.class));
+                } else {
+                    groupMemberListAdapter.removeMember(kickedUser.getUid());
+                }
+            }
+
+            @Override
+            public void onGroupMemberBanned(Action action, User bannedUser, User bannedBy, Group bannedFrom) {
+                Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
                 if (bannedUser.getUid().equals(CometChat.getLoggedInUser().getUid())) {
                     context.startActivity(new Intent(context, CometChatActivity.class));
                 } else {
@@ -170,16 +171,19 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
 
             @Override
             public void onGroupMemberUnbanned(Action action, User unbannedUser, User unbannedBy, Group unbannedFrom) {
+                Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
                 Log.e(TAG, "onGroupMemberUnbanned: "+unbannedUser.getUid() );
             }
+
+            @Override
+            public void onMemberAddedToGroup(Action action, User addedby, User userAdded, Group addedTo) {
+                Toast.makeText(context,"Group Member:"+action.getMessage(),Toast.LENGTH_LONG).show();
+                groupMemberListAdapter.addMember(userAdded.getUid(),UserToGroupMember(userAdded,action));
+            }
+
         });
     }
 
-    @Override
-    public void refresh(String GUID, int LIMIT,Context context) {
-        groupMembersRequest=null;
-        initMemberList(GUID,LIMIT,context);
-    }
     public GroupMember UserToGroupMember(User joinedUser,Action action)
     {
         GroupMember groupMember = new GroupMember(joinedUser.getUid(), action.getOldScope());

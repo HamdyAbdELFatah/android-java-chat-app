@@ -1,14 +1,13 @@
 package com.inscripts.cometchatpulse.demo.Activity;
 
-import android.media.Image;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Contracts.StringContract;

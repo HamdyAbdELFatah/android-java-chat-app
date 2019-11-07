@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.cometchat.pro.core.BannedGroupMembersRequest;
 import com.cometchat.pro.models.Action;
 import com.cometchat.pro.models.Group;
@@ -11,7 +12,7 @@ import com.cometchat.pro.models.User;
 import com.inscripts.cometchatpulse.demo.Activity.CometChatActivity;
 import com.inscripts.cometchatpulse.demo.Adapter.GroupMemberListAdapter;
 import com.inscripts.cometchatpulse.demo.Base.Presenter;
-import com.inscripts.cometchatpulse.demo.Contracts.BannedMemberListContract;
+import com.inscripts.cometchatpulse.demo.Contracts.BanedMemberListContract;
 import com.inscripts.cometchatpulse.demo.Utils.Logger;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
@@ -20,8 +21,8 @@ import com.cometchat.pro.models.GroupMember;
 import java.util.HashMap;
 import java.util.List;
 
-public class BannedMemberListPresenter extends Presenter<BannedMemberListContract.BannedMemberListView>
-        implements BannedMemberListContract.BannedMemberListPresenter {
+public class BanedMemberListPresenter extends Presenter<BanedMemberListContract.BanedMemberListView>
+        implements BanedMemberListContract.BanedMemberListPresenter {
 
     private BannedGroupMembersRequest bannedMembersRequest;
     private Context context;
@@ -116,12 +117,8 @@ public class BannedMemberListPresenter extends Presenter<BannedMemberListContrac
 
             @Override
             public void onGroupMemberBanned(Action action, User bannedUser, User bannedBy, Group bannedFrom) {
-                Log.e("OutCastedMemberList", "onGroupMemberbanned: "+bannedUser.getUid() );
-                if (bannedUser.getUid().equals(CometChat.getLoggedInUser().getUid())) {
-                    context.startActivity(new Intent(context, CometChatActivity.class));
-                } else {
-                    groupMemberListAdapter.addMember(bannedUser.getUid(), UserToGroupMember(bannedUser, action));
-                }
+                Log.e("OutCastedMemberList", "onGroupMemberbanned: " + bannedUser.getUid());
+                groupMemberListAdapter.addMember(bannedUser.getUid(), UserToGroupMember(bannedUser, action));
             }
         });
     }

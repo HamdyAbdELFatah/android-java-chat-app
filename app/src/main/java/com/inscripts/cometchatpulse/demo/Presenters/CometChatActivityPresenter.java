@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class CometChatActivityPresenter extends Presenter<CometChatActivityContract.CometChatActivityView>
 implements CometChatActivityContract.CometChatActivityPresenter {
 
@@ -39,7 +41,8 @@ implements CometChatActivityContract.CometChatActivityPresenter {
 
     @Override
     public void addMessageListener(final Context context, String listnerId) {
-        this.context=context;
+
+          this.context=context;
 
         CometChat.addMessageListener(listnerId, new CometChat.MessageListener() {
 
@@ -129,7 +132,7 @@ implements CometChatActivityContract.CometChatActivityPresenter {
 
             @Override
             public void onError(CometChatException e) {
-                Log.e(TAG, e.getMessage());
+                Timber.e(e.getMessage());
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

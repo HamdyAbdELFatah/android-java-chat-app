@@ -16,6 +16,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.View;
+
 import com.cometchat.pro.models.Group;
 import com.cometchat.pro.models.User;
 import com.inscripts.cometchatpulse.demo.Activity.IncomingCallActivity;

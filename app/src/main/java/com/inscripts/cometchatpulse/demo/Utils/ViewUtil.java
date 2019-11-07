@@ -1,8 +1,8 @@
 package com.inscripts.cometchatpulse.demo.Utils;
 
-import android.view.View;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import android.view.View;
 
 public class ViewUtil {
 

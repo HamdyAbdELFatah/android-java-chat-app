@@ -4,19 +4,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.cometchat.pro.constants.CometChatConstants;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.tabs.TabLayout;
-import com.inscripts.cometchatpulse.demo.Fragments.BannedMemberListFragment;
+import com.inscripts.cometchatpulse.demo.Fragments.BanedMemberListFragment;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Adapter.ViewPagerAdapter;
 import com.inscripts.cometchatpulse.demo.Contracts.GroupDetailActivityContract;
@@ -109,11 +110,11 @@ public class GroupDetailActivity extends AppCompatActivity implements View.OnCli
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         MemberListFragment memberListFragment = new MemberListFragment();
-        BannedMemberListFragment outcastMemberListFragment = new BannedMemberListFragment();
+        BanedMemberListFragment outcastMemberListFragment = new BanedMemberListFragment();
 
         bundle.putString(StringContract.IntentStrings.INTENT_GROUP_ID, groupId);
         bundle.putString(StringContract.IntentStrings.USER_ID, ownerUid);
-        bundle.putString(StringContract.IntentStrings.INTENT_SCOPE,scope);
+        bundle.putString(StringContract.IntentStrings.INTENT_SCOPE, scope);
 
         memberListFragment.setArguments(bundle);
         outcastMemberListFragment.setArguments(bundle);

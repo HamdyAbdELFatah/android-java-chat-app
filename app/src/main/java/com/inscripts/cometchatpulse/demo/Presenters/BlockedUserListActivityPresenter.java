@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class BlockedUserListActivityPresenter extends Presenter<BlockedUserListActivityContract.BlockedUserListActivityView> implements BlockedUserListActivityContract.BlockedUserListActivityPresenter{
 
     private static final String TAG = "BlockedUserListActivity";
@@ -30,7 +32,7 @@ public class BlockedUserListActivityPresenter extends Presenter<BlockedUserListA
             @Override
             public void onSuccess(List<User> users) {
                 for(User user : users){
-                  Log.d(TAG, "blockedUsersRequest onSuccess: "+user.toString());
+                    Timber.d("blockedUsersRequest onSuccess: %s", user.toString());
                   userHashMap.put(user.getUid(),user);
                   getBaseView().setAdapter(userHashMap);
                 }
@@ -38,7 +40,7 @@ public class BlockedUserListActivityPresenter extends Presenter<BlockedUserListA
 
             @Override
             public void onError(CometChatException e) {
-                Log.e(TAG, "blockedUsersRequest "+e.getMessage());
+                Timber.e("blockedUsersRequest %s", e.getMessage());
             }
         });
 
@@ -60,7 +62,7 @@ public class BlockedUserListActivityPresenter extends Presenter<BlockedUserListA
 
             @Override
             public void onError(CometChatException e) {
-
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

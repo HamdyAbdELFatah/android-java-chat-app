@@ -1,10 +1,9 @@
 package com.inscripts.cometchatpulse.demo.Activity;
 
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.RelativeLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.cometchat.pro.core.Call;
 import com.cometchat.pro.core.CometChat;
@@ -15,8 +14,6 @@ import com.inscripts.cometchatpulse.demo.Contracts.StringContract;
 import com.inscripts.cometchatpulse.demo.Presenters.CallActivityPresenter;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Utils.Logger;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 public class CallActivity extends AppCompatActivity implements CallActivityContract.CallActivityView {
 

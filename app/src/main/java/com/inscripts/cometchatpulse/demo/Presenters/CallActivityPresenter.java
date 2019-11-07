@@ -43,7 +43,7 @@ public class CallActivityPresenter extends Presenter<CallActivityContract.CallAc
             public void onOutgoingCallRejected(Call call) {
                 Timber.d("onOutgoingCallRejected: %s", call.toString());
                 Toast.makeText(context, "onOutgoingCallRejected", Toast.LENGTH_SHORT).show();
-                ((CallActivity) context).finish();
+                  ((CallActivity) context).finish();
             }
 
             @Override

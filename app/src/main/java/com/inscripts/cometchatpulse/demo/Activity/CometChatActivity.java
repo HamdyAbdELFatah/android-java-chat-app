@@ -5,22 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.viewpager.widget.ViewPager;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.models.User;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabLayout;
 import com.inscripts.cometchatpulse.demo.Adapter.ViewPagerAdapter;
 import com.inscripts.cometchatpulse.demo.Contracts.CometChatActivityContract;
 import com.inscripts.cometchatpulse.demo.Contracts.StringContract;
@@ -205,9 +203,12 @@ public class CometChatActivity extends AppCompatActivity implements ScrollHelper
                 }
             });
 
-            searchView.setOnCloseListener(() -> {
-                 searchUser(null);
-                return false;
+            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                     searchUser(null);
+                    return false;
+                }
             });
          }
 
@@ -215,7 +216,7 @@ public class CometChatActivity extends AppCompatActivity implements ScrollHelper
              searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
          }
 
-        return  super.onCreateOptionsMenu(menu);
+        return true;
     }
 
 

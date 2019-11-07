@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cometchat.pro.models.User;
+import com.cometchat.pro.core.CometChat;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Contracts.GroupListContract;
 import com.inscripts.cometchatpulse.demo.Adapter.GroupListAdapter;
@@ -137,12 +137,12 @@ public class GroupListFragment extends Fragment implements GroupListContract.Gro
 
             @Override
             public void onLongClick(View var1, int var2) {
-
                 group = (com.cometchat.pro.models.Group) var1.getTag(R.string.group_id);
-                if (group.getScope().equals(CometChatConstants.SCOPE_ADMIN)||group.getScope().equals(CometChatConstants.SCOPE_MODERATOR)) {
-                    registerForContextMenu(groupsRecyclerView);
-                    getActivity().openContextMenu(var1);
-                }
+                  if (group.getScope().equals(CometChatConstants.SCOPE_ADMIN)||group.getScope().equals(CometChatConstants.SCOPE_MODERATOR)) {
+                      registerForContextMenu(groupsRecyclerView);
+                      getActivity().openContextMenu(var1);
+                  }
+
             }
         }));
     }
@@ -164,7 +164,7 @@ public class GroupListFragment extends Fragment implements GroupListContract.Gro
         return super.onContextItemSelected(item);
     }
 
-    private void initJoinGroup(com.cometchat.pro.models.Group group, Pair<View,String>... pairs) {
+    private void initJoinGroup(com.cometchat.pro.models.Group group,Pair<View,String>... pairs) {
 
 
         if (CommonUtils.isConnected(getActivity())) {
@@ -272,7 +272,7 @@ public class GroupListFragment extends Fragment implements GroupListContract.Gro
     }
 
     @Override
-    public void setFilterGroup(HashMap<String,com.cometchat.pro.models.Group> groups) {
+    public void setFilterGroup(HashMap<String ,com.cometchat.pro.models.Group> groups) {
         if (groupListAdapter!=null){
              groupListAdapter.setFilterList(groups);
         }

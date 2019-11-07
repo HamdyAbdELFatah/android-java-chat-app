@@ -8,6 +8,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,14 +25,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.cometchat.pro.core.CometChat;
+
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Utils.AnimUtil;
 import com.inscripts.cometchatpulse.demo.Utils.KeyboardVisibilityEvent;
 import com.inscripts.cometchatpulse.demo.Utils.MediaUtils;
 import com.inscripts.cometchatpulse.demo.Utils.ViewUtil;
+
 import static com.inscripts.cometchatpulse.demo.Contracts.StringContract.RequestCode.ADD_DOCUMENT;
 import static com.inscripts.cometchatpulse.demo.Contracts.StringContract.RequestCode.ADD_GALLERY;
 import static com.inscripts.cometchatpulse.demo.Contracts.StringContract.RequestCode.ADD_SOUND;

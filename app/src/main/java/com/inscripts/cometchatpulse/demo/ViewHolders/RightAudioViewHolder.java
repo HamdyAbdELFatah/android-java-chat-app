@@ -1,6 +1,9 @@
 package com.inscripts.cometchatpulse.demo.ViewHolders;
 
 import android.content.Context;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Guideline;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -8,10 +11,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Guideline;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.inscripts.cometchatpulse.demo.CustomView.CircleImageView;
 import com.inscripts.cometchatpulse.demo.R;

@@ -1,12 +1,13 @@
 package com.inscripts.cometchatpulse.demo.Adapter;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.cometchat.pro.models.MediaMessage;
 import com.inscripts.cometchatpulse.demo.R;
@@ -37,7 +38,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MediaHolder>
 
         try {
 
-            Glide.with(context).load(messageList.get(i).getAttachment().getFileUrl()).into(mediaHolder.imageView);
+            Glide.with(context).load(messageList.get(i).getUrl()).into(mediaHolder.imageView);
 
         } catch (Exception e) {
             e.printStackTrace();

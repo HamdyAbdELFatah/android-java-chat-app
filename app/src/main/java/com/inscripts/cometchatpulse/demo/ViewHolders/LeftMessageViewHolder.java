@@ -1,9 +1,9 @@
 package com.inscripts.cometchatpulse.demo.ViewHolders;
 
-
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.inscripts.cometchatpulse.demo.CustomView.CircleImageView;
 import com.inscripts.cometchatpulse.demo.R;
 

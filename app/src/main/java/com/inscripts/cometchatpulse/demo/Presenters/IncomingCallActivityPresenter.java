@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -81,7 +82,7 @@ public class IncomingCallActivityPresenter extends Presenter<IncomingCallActivit
 
                  @Override
                  public void onError(CometChatException e) {
-
+                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                  }
              });
     }
@@ -101,7 +102,7 @@ public class IncomingCallActivityPresenter extends Presenter<IncomingCallActivit
 
             @Override
             public void onError(CometChatException e) {
-
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });

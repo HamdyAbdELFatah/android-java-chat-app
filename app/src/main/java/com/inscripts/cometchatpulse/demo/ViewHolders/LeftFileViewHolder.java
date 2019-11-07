@@ -1,7 +1,6 @@
 package com.inscripts.cometchatpulse.demo.ViewHolders;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;

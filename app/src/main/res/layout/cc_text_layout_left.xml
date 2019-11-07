@@ -5,7 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
+    <!--<ImageView-->
+        <!--android:id="@+id/leftArrow"-->
+        <!--android:layout_width="25dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:rotation="180"-->
+        <!--android:visibility="visible"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/imgAvatar"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/senderName"-->
+        <!--app:layout_constraintVertical_bias="0.0"-->
+        <!--app:srcCompat="@drawable/cc_message_arrow_left" />-->
 
     <TextView
         android:id="@+id/textViewMessage"

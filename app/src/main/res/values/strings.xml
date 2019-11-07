@@ -15,11 +15,13 @@
     <string name="contact_name">contactName</string>
 
 
+    <string name="clear_conversation">Clear conversation</string>
     <string name="image_preview">Image preview</string>
 
     <string name="create_chatroom">New Group</string>
 
     <string name="password_hint">Password</string>
+    <string name="default_status_message">I\'m Available</string>
     <string name="joined_group">Joined Group</string>
 
     <string name="other_group">Other Group</string>
@@ -35,6 +37,7 @@
     <string name="group_description">Group Description</string>
     <string name="video">Video</string>
     <string name="group_member">groupMember</string>
+    <string name="settings">Settings</string>
     <string name="today_last_seen">Last seen today at </string>
     <string name="yesterday_last_seen">Last seen yesterday at </string>
     <string name="cancel">Cancel</string>
@@ -59,12 +62,16 @@
     <string name="new_message">New Message</string>
     <string name="pemssion_warning">PERMISSION NOT GRANTED</string>
     <string name="member">Members</string>
+    <string name="outcasted_member">Outcasted Members</string>
+    <string name="created_by">Created by</string>
     <string name="jump_to_latest">Jump to latest</string>
     <string name="enter_uid_toast">Please Enter Uid</string>
     <string name="wait">Please Wait</string>
     <string name="groupid">GroupId</string>
     <string name="incoming_call">Incoming Call</string>
     <string name="calling">Calling</string>
+    <string name="swipe_up_to_answer">Swipe up to answer</string>
+    <string name="swipe_down_to_reject">Swipe down to reject</string>
     <string name="message">message</string>
     <string name="enter_uid">Enter Uid</string>
     <string name="haven_t_created_a_user_yet_select_one_of_our_default_users_for_testing">Haven\'t created a user yet? Select one of our default users for testing:</string>

@@ -1,13 +1,13 @@
 package com.inscripts.cometchatpulse.demo.Adapter;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.cometchat.pro.models.MessageReceipt;
 import com.inscripts.cometchatpulse.demo.CustomView.CircleImageView;
