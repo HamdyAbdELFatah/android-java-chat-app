@@ -15,8 +15,15 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import com.cometchat.pro.core.Call;
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.models.Group;
+import com.cometchat.pro.models.TextMessage;
 import com.cometchat.pro.models.User;
 import com.inscripts.cometchatpulse.demo.Activity.IncomingCallActivity;
 import com.inscripts.cometchatpulse.demo.R;
@@ -28,6 +35,7 @@ public class CommonUtils {
 
     static ConnectivityManager cm = null;
 
+    static Intent intent;
     public static boolean isConnected(Context context) {
 
         if (cm == null) {
@@ -97,6 +105,28 @@ public class CommonUtils {
              context.startActivity(intent);
          }
     }
+
+    //Notification Call Handle
+    public static Intent startCallIntentNotification(Context context, User user, String type,
+                                                     boolean isOutgoing, @NonNull String sessionId)
+    {
+
+        Intent videoCallIntent = new Intent(context, IncomingCallActivity.class);
+        videoCallIntent.putExtra(StringContract.IntentStrings.NAME, user.getName());
+        videoCallIntent.putExtra(StringContract.IntentStrings.USER_ID,user.getUid());
+        videoCallIntent.putExtra(StringContract.IntentStrings.SESSION_ID,sessionId);
+        videoCallIntent.putExtra(StringContract.IntentStrings.AVATAR, user.getAvatar());
+        videoCallIntent.setAction(type);
+
+        if (isOutgoing) {
+            videoCallIntent.setType("outgoing");
+        }
+        else {
+            videoCallIntent.setType("incoming");
+        }
+        return videoCallIntent;
+    }
+
 
     public static float dpToPx(Context context, float valueInDp) {
         Resources resources = context.getResources();

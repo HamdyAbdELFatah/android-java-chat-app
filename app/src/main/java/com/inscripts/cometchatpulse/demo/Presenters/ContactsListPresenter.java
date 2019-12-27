@@ -8,6 +8,7 @@ import com.cometchat.pro.constants.CometChatConstants;
 import com.inscripts.cometchatpulse.demo.Base.Presenter;
 import com.inscripts.cometchatpulse.demo.CometApplication;
 import com.inscripts.cometchatpulse.demo.Contracts.ContactsContract;
+import com.inscripts.cometchatpulse.demo.Helper.MyFirebaseMessagingService;
 import com.inscripts.cometchatpulse.demo.Utils.Logger;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.core.UsersRequest;
@@ -35,7 +36,8 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
 
         if (usersRequest==null) {
 
-            usersRequest  = new UsersRequest.UsersRequestBuilder().setLimit(100).build();
+            usersRequest = new UsersRequest.UsersRequestBuilder().setLimit(100).build();
+        }
 
             usersRequest.fetchNext(new CometChat.CallbackListener<List<User>>() {
                 @Override
@@ -43,6 +45,7 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
                     Logger.error(TAG," "+users.size());
 
                         for (int i = 0; i < users.size(); i++) {
+                            MyFirebaseMessagingService.unsubscribeUser(users.get(i).getUid());
                             Timber.d("fetchNext onSuccess: %s", users.get(i).toString());
                             userHashMap.put(users.get(i).getUid(), users.get(i));
                         }
@@ -54,30 +57,6 @@ public class ContactsListPresenter extends Presenter<ContactsContract.ContactVie
                     Timber.d("fetchNext onError: %s", e.getMessage());
                 }
             });
-        }
-        else {
-            usersRequest.fetchNext(new CometChat.CallbackListener<List<User>>() {
-                @Override
-                public void onSuccess(List<User> users) {
-                    if (users != null) {
-                            for (int i = 0; i < users.size(); i++) {
-
-                                Timber.d("fetchNext onSuccess: %s", users.toString());
-
-                                userHashMap.put(users.get(i).getUid(), users.get(i));
-                            }
-                            getBaseView().setContactAdapter(userHashMap);
-                    }
-                }
-
-                @Override
-                public void onError(CometChatException e) {
-                    Timber.d("fetchNext old onError: ");
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-            });
-        }
 
     }
 

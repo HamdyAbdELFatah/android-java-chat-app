@@ -21,7 +21,7 @@ public class LeftImageVideoViewHolder extends RecyclerView.ViewHolder{
     private static final String TAG = LeftImageVideoViewHolder.class.getSimpleName();
     public TextView messageTimeStamp;
     public TextView senderName;
-    public TextView imageTitle;
+    public TextView imageTitle,caption;
     public CircleImageView avatar;
     public View imageContainer;
     public ImageButton btnPlayVideo;
@@ -40,6 +40,7 @@ public class LeftImageVideoViewHolder extends RecyclerView.ViewHolder{
             params.guidePercent = 0.5f;
             leftGuideLine.setLayoutParams(params);
         }
+        caption = leftImageMessageView.findViewById(R.id.caption);
         messageTimeStamp = leftImageMessageView.findViewById(R.id.timeStamp);
         avatar = leftImageMessageView.findViewById(R.id.imgAvatar);
         imageContainer = leftImageMessageView.findViewById(R.id.imageContainer);

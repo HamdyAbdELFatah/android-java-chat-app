@@ -159,6 +159,7 @@ public class ContactsFragment extends Fragment implements ContactsContract.Conta
 
     @Override
     public void setFilterList(HashMap<String, User> hashMap) {
+        if (contactListAdapter!=null)
         contactListAdapter.setFilterList(hashMap);
     }
 

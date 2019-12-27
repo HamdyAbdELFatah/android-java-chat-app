@@ -40,7 +40,15 @@
             android:cropToPadding="false"
             android:src="@drawable/ic_broken_image_black"
             android:visibility="visible" />
-
+        <TextView
+            android:padding="5dp"
+            android:visibility="gone"
+            android:background="@drawable/cc_custom_right_bubble"
+            android:id="@+id/caption"
+            android:textColor="@android:color/white"
+            android:layout_gravity="bottom|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </androidx.cardview.widget.CardView>
 
     <ImageButton

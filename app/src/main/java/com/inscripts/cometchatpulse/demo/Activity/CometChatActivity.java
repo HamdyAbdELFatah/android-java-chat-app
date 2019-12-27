@@ -30,6 +30,7 @@ import com.inscripts.cometchatpulse.demo.Fragments.ContactsFragment;
 import com.inscripts.cometchatpulse.demo.Fragments.GroupListFragment;
 import com.inscripts.cometchatpulse.demo.Fragments.RecentsFragment;
 import com.inscripts.cometchatpulse.demo.Helper.FabIconAnimator;
+import com.inscripts.cometchatpulse.demo.Helper.MyFirebaseMessagingService;
 import com.inscripts.cometchatpulse.demo.Helper.ScrollHelper;
 import com.inscripts.cometchatpulse.demo.Presenters.CometChatActivityPresenter;
 import com.inscripts.cometchatpulse.demo.R;
@@ -74,6 +75,7 @@ public class CometChatActivity extends AppCompatActivity implements ScrollHelper
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comet_chat);
         context = this;
+        MyFirebaseMessagingService.subscribeUser(CometChat.getLoggedInUser().getUid());
         cometChatActivityPresenter = new CometChatActivityPresenter();
         cometChatActivityPresenter.attach(this);
         initViewComponents();

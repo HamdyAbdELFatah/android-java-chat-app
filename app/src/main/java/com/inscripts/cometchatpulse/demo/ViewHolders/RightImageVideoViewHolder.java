@@ -20,7 +20,7 @@ import static android.content.Context.WINDOW_SERVICE;
 
 public class RightImageVideoViewHolder extends RecyclerView.ViewHolder{
     private static final String TAG = RightImageVideoViewHolder.class.getSimpleName();
-    public TextView messageTimeStamp,imageTitle;
+    public TextView messageTimeStamp,imageTitle,caption;
     public ImageView imageMessage;
     public CircleImageView messageStatus;
     public View imageContainer;
@@ -39,6 +39,7 @@ public class RightImageVideoViewHolder extends RecyclerView.ViewHolder{
             params.guidePercent = 0.5f;
             rightGuideLine.setLayoutParams(params);
         }
+        caption = rightImageMessageView.findViewById(R.id.caption);
         messageTimeStamp = rightImageMessageView.findViewById(R.id.timeStamp);
         imageMessage = rightImageMessageView.findViewById(R.id.imageMessage);
         imageContainer = rightImageMessageView.findViewById(R.id.imageContainer);

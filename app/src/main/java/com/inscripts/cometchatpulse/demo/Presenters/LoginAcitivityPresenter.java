@@ -23,8 +23,10 @@ LoginActivityContract.LoginActivityPresenter{
         CometChat.login(uid, StringContract.AppDetails.API_KEY, new CometChat.CallbackListener<User>() {
             @Override
             public void onSuccess(User user) {
-                Log.d(TAG, "onSuccess: "+user.getUid());
-                getBaseView().startCometChatActivity();
+                Log.d(TAG, "onSuccess: " + user.getUid());
+                if (isViewAttached()) {
+                    getBaseView().startCometChatActivity();
+                }
             }
 
             @Override

@@ -67,6 +67,14 @@
         <activity android:name=".Activity.CallActivity" />
         <activity android:name=".Activity.SelectUserActivity"
             android:parentActivityName=".Activity.GroupDetailActivity"/>
+
+        <service android:name=".Helper.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".Helper.CallNotificationAction" />
     </application>
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature

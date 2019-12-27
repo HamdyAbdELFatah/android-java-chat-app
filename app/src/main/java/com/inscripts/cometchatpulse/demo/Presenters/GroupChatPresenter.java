@@ -21,6 +21,7 @@ import com.inscripts.cometchatpulse.demo.Base.Presenter;
 import com.inscripts.cometchatpulse.demo.Contracts.GroupChatActivityContract;
 import com.inscripts.cometchatpulse.demo.Contracts.StringContract;
 import com.inscripts.cometchatpulse.demo.CustomView.CircleImageView;
+import com.inscripts.cometchatpulse.demo.Helper.MyFirebaseMessagingService;
 import com.inscripts.cometchatpulse.demo.R;
 import com.inscripts.cometchatpulse.demo.Utils.CommonUtils;
 import com.inscripts.cometchatpulse.demo.Utils.Logger;
@@ -168,11 +169,10 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
     @Override
     public void addGroupEventListener(String listenerId, final String groupId, final String ownerId) {
-
         CometChat.addGroupListener(listenerId, new CometChat.GroupListener() {
             @Override
             public void onGroupMemberJoined(Action action, User joinedUser, Group joinedGroup) {
-
+                Log.e(TAG, "onGroupMemberJoined: "+action.getMessage());
                 if (groupId != null && groupId.equals(action.getReceiverUid())) {
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
@@ -181,6 +181,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberLeft(Action action, User joinedUser, Group joinedGroup) {
+                Log.e(TAG, "onGroupMemberLeft: "+action.getMessage());
                 if (groupId != null && groupId.equals(action.getReceiverUid())) {
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
@@ -189,6 +190,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberKicked(Action action, User kickedUser, User kickedBy, Group kickedFrom) {
+                Log.e(TAG, "onGroupMemberKicked: "+action.getMessage());
                 if (groupId != null && groupId.equals(action.getReceiverUid())) {
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
@@ -197,6 +199,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberBanned(Action action, User bannedUser, User bannedBy, Group bannedFrom) {
+                Log.e(TAG, "onGroupMemberBan: "+action.getMessage());
                 if (groupId != null && groupId.equals(action.getReceiverUid())) {
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
@@ -205,6 +208,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onGroupMemberUnbanned(Action action, User unbannedUser, User unbannedBy, Group unbannedFrom) {
+                Log.e(TAG, "onGroupMemberUnban: "+action.getMessage());
                 if (groupId != null && groupId.equals(action.getReceiverUid())) {
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
@@ -221,6 +225,74 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
 
             @Override
             public void onMemberAddedToGroup(Action action, User addedby, User userAdded, Group addedTo) {
+                Log.e(TAG, "onGroupMemberAdded: "+action.getMessage());
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+
+        });
+
+        //Second Listener
+        CometChat.addGroupListener(listenerId+"2", new CometChat.GroupListener() {
+            @Override
+            public void onGroupMemberJoined(Action action, User joinedUser, Group joinedGroup) {
+                Log.e(TAG, "2onGroupMemberJoined: "+action.getMessage());
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+            @Override
+            public void onGroupMemberLeft(Action action, User joinedUser, Group joinedGroup) {
+                Log.e(TAG, "2onGroupMemberLeft: "+action.getMessage());
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+            @Override
+            public void onGroupMemberKicked(Action action, User kickedUser, User kickedBy, Group kickedFrom) {
+                Log.e(TAG, "2onGroupMemberKicked: "+action.getMessage());
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+            @Override
+            public void onGroupMemberBanned(Action action, User bannedUser, User bannedBy, Group bannedFrom) {
+                Log.e(TAG, "2onGroupMemberBan: "+action.getMessage());
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+            @Override
+            public void onGroupMemberUnbanned(Action action, User unbannedUser, User unbannedBy, Group unbannedFrom) {
+                Log.e(TAG, "2onGroupMemberUnban: "+action.getMessage());
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+            @Override
+            public void onGroupMemberScopeChanged(Action action, User updatedBy, User updatedUser, String scopeChangedTo, String scopeChangedFrom, Group group) {
+                if (groupId != null && groupId.equals(action.getReceiverUid())) {
+                    if (isViewAttached())
+                        getBaseView().addSentMessage(action);
+                }
+            }
+
+            @Override
+            public void onMemberAddedToGroup(Action action, User addedby, User userAdded, Group addedTo) {
+                Log.e(TAG, "2onGroupMemberAdded: "+action.getMessage());
                 if (groupId != null && groupId.equals(action.getReceiverUid())) {
                     if (isViewAttached())
                         getBaseView().addSentMessage(action);
@@ -525,6 +597,7 @@ public class GroupChatPresenter extends Presenter<GroupChatActivityContract.Grou
             @Override
             public void onSuccess(String s) {
                 group.setHasJoined(false);
+                MyFirebaseMessagingService.unsubscribeGroup(group.getGuid());
                 Toast.makeText(context, "left", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, CometChatActivity.class);
                 ((Activity) context).startActivityForResult(intent, StringContract.RequestCode.LEFT);

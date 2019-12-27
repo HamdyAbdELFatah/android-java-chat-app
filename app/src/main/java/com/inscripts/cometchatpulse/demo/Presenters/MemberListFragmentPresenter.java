@@ -52,12 +52,13 @@ public class MemberListFragmentPresenter extends Presenter<MemberListFragmentCon
         groupMembersRequest.fetchNext(new CometChat.CallbackListener<List<GroupMember>>() {
             @Override
             public void onSuccess(List<GroupMember> groupMembers) {
-                Logger.error("groupMembersRequest"," "+groupMembers.size());
-                if (isViewAttached())
-                    for (GroupMember groupMember :groupMembers) {
-                        groupMemberHashMap.put(groupMember.getUid(),groupMember);
+                Logger.error("groupMembersRequest", " " + groupMembers.size());
+                if (isViewAttached()) {
+                    for (GroupMember groupMember : groupMembers) {
+                        groupMemberHashMap.put(groupMember.getUid(), groupMember);
                     }
-                getBaseView().setAdapter(groupMemberHashMap);
+                    getBaseView().setAdapter(groupMemberHashMap);
+                }
             }
 
             @Override

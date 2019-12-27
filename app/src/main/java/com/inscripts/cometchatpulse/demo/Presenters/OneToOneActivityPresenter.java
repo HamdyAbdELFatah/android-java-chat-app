@@ -270,13 +270,11 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
                             if (!baseMessage.getCategory().equals(CometChatConstants.CATEGORY_ACTION)&&baseMessage.getDeletedAt()==0) {
                                 list.add(baseMessage);
                             }
+                             if (baseMessage.getSender().getUid().equals(contactUid)){
+                                 CometChat.markAsRead(baseMessage.getId(), baseMessage.getSender().getUid(), baseMessage.getReceiverType());
+                             }
                         }
-                        if (baseMessages.size()!=0) {
-                            BaseMessage baseMessage = baseMessages.get(baseMessages.size() - 1);
-                            if (!baseMessage.getSender().getUid().equals(CometChat.getLoggedInUser().getUid())) {
-                                CometChat.markAsRead(baseMessage.getId(), baseMessage.getSender().getUid(), baseMessage.getReceiverType());
-                            }
-                        }
+
                         getBaseView().setAdapter(list);
                     }
                 }
@@ -475,7 +473,7 @@ public class OneToOneActivityPresenter extends Presenter<OneToOneActivityContrac
 
         messagesRequest=null;
         MessagesRequest searchMessageRequest=new MessagesRequest.MessagesRequestBuilder()
-                .setUID(UID).setSearchKeyword(s).setLimit(30).build();
+                .setUID(UID).setSearchKeyword(s).setCategory(CometChatConstants.CATEGORY_MESSAGE).setLimit(30).build();
 
         searchMessageRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
                 @Override
