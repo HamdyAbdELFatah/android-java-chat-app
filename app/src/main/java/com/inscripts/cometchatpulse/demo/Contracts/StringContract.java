@@ -45,14 +45,14 @@ public class StringContract {
     }
 
     public static class AppDetails{
-        public static final String APP_ID  =  "1180062de409d58"; // your app_id
-        public static final String API_KEY =  "602651b12b70fceb23e7720af51558255c8e85bb"; // your api_key
-        public static final String REGION = "us";  // your app region
+        public static final String APP_ID  =  "XXXXXXXXXXXXX"; // your app_id
+        public static final String API_KEY =  "XXXXXXXXXXXXXXXXXXXXXX"; // your api_key
+        public static final String REGION = "XXXXXXX";  // your app region
 
     }
 
     public static class Firebase {
-        public static final String FCM_APPLICATION_ID = "1:801442401008:android:f44049d199eeee30a49035";
-        public static final String FCM_WEB_API_KEY = "AIzaSyDWQr2Fm90jGYzMXFMGVB5Pegja4UpMorM" ;
+        public static final String FCM_APPLICATION_ID = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // Firebase Application ID
+        public static final String FCM_WEB_API_KEY = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX" ; //Firebase Web API Key
     }
 }
